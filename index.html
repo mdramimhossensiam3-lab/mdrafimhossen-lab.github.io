@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafim - User & NID Verification Portal</title>
+    <title>Rafim Live TV & Sports</title>
     <style>
         * {
             margin: 0;
@@ -14,13 +14,13 @@
         body {
             background: #090a16;
             color: #ffffff;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
         }
         header {
             background: rgba(16, 18, 38, 0.95);
-            padding: 18px 40px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -28,103 +28,95 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
         .brand {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             background: linear-gradient(45deg, #00dfd8, #0072ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .tagline {
-            color: #8a8fae;
-            font-size: 13px;
-        }
-        .main-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
-        .card {
-            background: #111325;
-            border: 1px solid rgba(0, 223, 216, 0.2);
-            width: 100%;
-            max-width: 500px;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        }
-        .card h2 {
-            font-size: 22px;
-            color: #00dfd8;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-        .card p {
-            color: #9aa0c0;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #d1d5db;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            background: #090a16;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+        .live-badge {
+            background: #ff0055;
             color: #fff;
-            font-size: 15px;
-            outline: none;
-            transition: 0.3s;
-        }
-        .form-group input:focus {
-            border-color: #00dfd8;
-            box-shadow: 0 0 10px rgba(0, 223, 216, 0.2);
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(90deg, #00dfd8, #0072ff);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            animation: blink 1.5s infinite;
         }
-        .btn-submit:hover {
-            opacity: 0.9;
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 15px;
+            width: 100%;
+        }
+        
+        /* Video Player Area */
+        .player-box {
+            background: #000;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 223, 216, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .player-box iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Channel Selection Grid */
+        .section-title {
+            margin: 25px 0 15px 0;
+            font-size: 18px;
+            color: #00dfd8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+        .btn-channel {
+            background: #111325;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-channel:hover {
+            background: rgba(0, 223, 216, 0.15);
+            border-color: #00dfd8;
             transform: translateY(-2px);
         }
-        .status-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            display: none;
-            font-size: 14px;
-            text-align: center;
-        }
-        .status-box.success {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid #00ff88;
-            color: #00ff88;
-        }
-        .status-box.error {
-            background: rgba(255, 0, 85, 0.1);
-            border: 1px solid #ff0055;
-            color: #ff0055;
+        .btn-channel.active {
+            background: linear-gradient(135deg, #00dfd8, #0072ff);
+            border-color: transparent;
+            font-weight: bold;
         }
         footer {
+            margin-top: auto;
             text-align: center;
             padding: 20px;
             font-size: 13px;
@@ -136,77 +128,69 @@
 <body>
 
     <header>
-        <div>
-            <div class="brand">Rafim Systems</div>
-            <div class="tagline">Identity & User Verification Portal</div>
-        </div>
+        <div class="brand">Rafim Live Sports & TV Hub</div>
+        <div class="live-badge">🔴 LIVE STREAM</div>
     </header>
 
-    <div class="main-container">
-        <div class="card">
-            <h2>NID & User Verification</h2>
-            <p>আপনার ১০/১৭ ডিজিটের NID নম্বর ও ফোন নম্বর দিয়ে ভেরিফিকেশন সম্পন্ন করুন</p>
+    <div class="container">
+        <!-- Main Video Screen -->
+        <div class="player-box">
+            <iframe id="mainPlayer" src="https://www.youtube.com/embed/live_stream?channel=UCbv1G1zY7N2XU02M-EaRkKw" allowfullscreen allow="autoplay"></iframe>
+        </div>
 
-            <form id="verifyForm">
-                <div class="form-group">
-                    <label>পূর্ণ নাম (Full Name)</label>
-                    <input type="text" id="fullName" placeholder="যেমন: Rafim Hossen" required>
-                </div>
+        <!-- Sports Channels -->
+        <div class="section-title">⚽ Sports Live Channels (লাইভ খেলা)</div>
+        <div class="grid">
+            <button class="btn-channel active" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UCbv1G1zY7N2XU02M-EaRkKw', this)">
+                ⚽ T Sports Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UCc9wZ69k5kQ0z2p-8H5l0wQ', this)">
+                🏏 GTV Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UC_X-F-x79Ww9_N15h6N98Yg', this)">
+                🏆 Star Sports Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UC-0s9W2lM2N_6a2p5-b-0gQ', this)">
+                ⚽ Live Football Stream
+            </button>
+        </div>
 
-                <div class="form-group">
-                    <label>মোবাইল নম্বর (Phone Number)</label>
-                    <input type="tel" id="phone" placeholder="017XXXXXXXX" required>
-                </div>
-
-                <div class="form-group">
-                    <label>এনআইডি নম্বর (NID Number)</label>
-                    <input type="text" id="nid" placeholder="১০ বা ১৭ ডিজিটের NID লিখুন" required>
-                </div>
-
-                <button type="submit" class="btn-submit">Submit Verification</button>
-            </form>
-
-            <div id="statusBox" class="status-box"></div>
+        <!-- BD News Channels -->
+        <div class="section-title">📰 Bangladesh News Channels (লাইভ খবর)</div>
+        <div class="grid">
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UC8V_pQvW2lKk3Ew6c2Z1Ftw', this)">
+                📺 Somoy News Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UC6kLqR3t37mQ1Z-QY3Z9wYg', this)">
+                📺 Jamuna TV Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UCB2uJkR434eR4K00J059w3w', this)">
+                📺 Independent TV
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UCn89S2r92Q23Vv_0Q9k0M0w', this)">
+                📺 DBC News Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UCuG812y2P8m9X6mK4lJg2Ew', this)">
+                📺 Channel 24 Live
+            </button>
+            <button class="btn-channel" onclick="playChannel('https://www.youtube.com/embed/live_stream?channel=UC-K5h8F2e4_X-L-0182_9Qw', this)">
+                📺 Ekattor TV Live
+            </button>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Rafim Systems. All Rights Reserved. Secure Identity Verification Service.
+        &copy; 2026 Rafim Live Hub. All Streamed Content Belongs to Respective Network Providers.
     </footer>
 
     <script>
-        document.getElementById('verifyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const nid = document.getElementById('nid').value.trim();
-            const statusBox = document.getElementById('statusBox');
-
-            statusBox.style.display = 'block';
-
-            // Phone Validation
-            const phoneRegex = /^01[3-9]\d{8}$/;
-            if (!phoneRegex.test(phone)) {
-                statusBox.className = 'status-box error';
-                statusBox.innerText = '⚠️ সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন: 017XXXXXXXX)';
-                return;
-            }
-
-            // NID Validation (10 or 17 digits)
-            if (nid.length !== 10 && nid.length !== 17) {
-                statusBox.className = 'status-box error';
-                statusBox.innerText = '⚠️ NID নম্বর অবশ্যই ১০ অথবা ১৭ ডিজিটের হতে হবে।';
-                return;
-            }
-
-            // Success Response Simulation
-            statusBox.className = 'status-box success';
-            statusBox.innerText = `✅ ধন্যবাদ ${name}! আপনার NID (${nid}) ভেরিফিকেশন রিকোয়েস্ট সফলভাবে জমা হয়েছে।`;
+        function playChannel(url, element) {
+            document.getElementById('mainPlayer').src = url;
             
-            // Clear inputs
-            document.getElementById('verifyForm').reset();
-        });
+            // Active Button Highlight
+            document.querySelectorAll('.btn-channel').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+        }
     </script>
 </body>
 </html>
