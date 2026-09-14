@@ -3,105 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ডিজিটাল সার্ভিস ও সোশ্যাল মিডিয়া মোকাবেলা</title>
+    <title>Pro Photo Editor & Creator</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
-            line-height: 1.6;
+            background-color: #1a1a24;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
+        /* Navbar */
         header {
-            background: #0d6efd;
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
+            background: #111118;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
         }
-        header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-            border-top: 4px solid #0d6efd;
-        }
-        .card h3 {
-            margin-bottom: 10px;
-            color: #0d6efd;
-        }
-        .contact-box {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 30px;
-            margin-top: 40px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            margin: 10px;
-            border-radius: 5px;
-            text-decoration: none;
+        .logo {
+            font-size: 22px;
             font-weight: bold;
+            color: #00d2ff;
+        }
+        .pro-badge {
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Main Workspace */
+        .workspace {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .sidebar {
+            width: 300px;
+            background: #22222e;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 1px solid #333;
+        }
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: #14141c;
+            min-height: 400px;
+        }
+        canvas {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #000;
+        }
+
+        /* Controls */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .control-group label {
+            font-size: 14px;
+            color: #ccc;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #00d2ff;
+        }
+        .file-btn, .action-btn {
+            background: #00d2ff;
+            color: #000;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .file-btn:hover, .action-btn:hover {
+            background: #0099cc;
+            color: #fff;
+        }
+        .download-btn {
+            background: #25d366;
             color: white;
         }
-        .btn-call { background-color: #0d6efd; }
-        .btn-whatsapp { background-color: #25d366; }
+        .download-btn:hover {
+            background: #1eb954;
+        }
+
+        /* Pro Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #22222e;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+        }
+        .modal-content h2 {
+            margin-bottom: 10px;
+            color: #ff512f;
+        }
+        .close-btn {
+            margin-top: 15px;
+            background: #555;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>ডিজিটাল সোলিউশন ও সার্ভিস</h1>
-        <p>আপনার ব্যবসাকে অনলাইনে এগিয়ে নেওয়ার বিশ্বস্ত মাধ্যম</p>
+        <div class="logo">PicEditor Pro</div>
+        <div class="pro-badge" onclick="openProModal()">GO PRO ✨</div>
     </header>
 
-    <div class="container">
-        <h2 style="text-align: center;">আমাদের সেবাসমূহ</h2>
-        
-        <div class="services-grid">
-            <div class="card">
-                <h3>ওয়েবসাইট ডিজাইন</h3>
-                <p>সহজ ও দ্রুত লোড হওয়া সুন্দর পার্সোনাল বা বিজনেস ওয়েবসাইট তৈরি।</p>
+    <div class="workspace">
+        <!-- Controls Sidebar -->
+        <div class="sidebar">
+            <input type="file" id="upload" accept="image/*" style="display:none">
+            <label for="upload" class="file-btn">📁 ছবি আপলোড করুন</label>
+
+            <div class="control-group">
+                <label>উজ্জ্বলতা (Brightness)</label>
+                <input type="range" id="brightness" min="0" max="200" value="100">
             </div>
-            <div class="card">
-                <h3>ফেসবুক পেজ সেটআপ</h3>
-                <p>প্রফেশনাল ফেসবুক পেজ তৈরি, কভার পিকচার ও লোগো ডিজাইন।</p>
+
+            <div class="control-group">
+                <label>কনট্রাস্ট (Contrast)</label>
+                <input type="range" id="contrast" min="0" max="200" value="100">
             </div>
-            <div class="card">
-                <h3>ডিজিটাল মার্কেটিং</h3>
-                <p>অনলাইনে আপনার পণ্য বা সেবার প্রচার ও প্রসার ঘটানো।</p>
+
+            <div class="control-group">
+                <label>সাদা-কালো (Grayscale)</label>
+                <input type="range" id="grayscale" min="0" max="100" value="0">
             </div>
+
+            <div class="control-group">
+                <label>ভিন্টেজ লুক (Sepia)</label>
+                <input type="range" id="sepia" min="0" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>ঝাপসা কমানো/বাড়ানো (Blur)</label>
+                <input type="range" id="blur" min="0" max="10" value="0">
+            </div>
+
+            <button class="action-btn download-btn" onclick="downloadImage()">💾 এডিট করা ছবি ডাউনলোড করুন</button>
         </div>
 
-        <div class="contact-box">
-        <h2>সরাসরি যোগাযোগ করুন</h2>
-        <p>যেকোনো সেবার জন্য আমাদের সাথে কথা বলুন</p>
-        <a href="tel:01700000000" class="btn btn-call">ফোন করুন</a>
-        <a href="https://wa.me/8801310153278" class="btn btn-whatsapp">হোয়াটসঅ্যাপে মেসেজ দিন</a>
-    </div>
+        <!-- Canvas Workspace -->
+        <div class="canvas-area">
+            <canvas id="canvas"></canvas>
+        </div>
     </div>
 
+    <!-- Pro Upgrade Modal -->
+    <div class="modal" id="proModal">
+        <div class="modal-content">
+            <h2>PRO ভার্সনে আপডেট করুন</h2>
+            <p>এআই দিয়ে অটোমেটিক পুরোনো ছবি পরিষ্কার করা এবং ব্যাকগ্রাউন্ড রিমুভ করার সুবিধা পেতে PRO সাবস্ক্রিপশন নিন।</p>
+            <br>
+            <button class="file-btn" style="width:100%">মাত্র ৳৪৯৯/মাস - কিনুন</button>
+            <button class="close-btn" onclick="closeProModal()">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <script>
+        const upload = document.getElementById('upload');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let img = new Image();
+
+        // Load Uploaded Image
+        upload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        applyFilters();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Sliders & Controls
+        const brightness = document.getElementById('brightness');
+        const contrast = document.getElementById('contrast');
+        const grayscale = document.getElementById('grayscale');
+        const sepia = document.getElementById('sepia');
+        const blur = document.getElementById('blur');
+
+        function applyFilters() {
+            if (!img.src) return;
+            ctx.filter = `
+                brightness(${brightness.value}%)
+                contrast(${contrast.value}%)
+                grayscale(${grayscale.value}%)
+                sepia(${sepia.value}%)
+                blur(${blur.value}px)
+            `;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+
+        [brightness, contrast, grayscale, sepia, blur].forEach(slider => {
+            slider.addEventListener('input', applyFilters);
+        });
+
+        // Download Image
+        function downloadImage() {
+            if (!img.src) {
+                alert("দয়া করে প্রথমে একটি ছবি আপলোড করুন!");
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = 'edited-photo.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Pro Modal Functions
+        function openProModal() {
+            document.getElementById('proModal').style.display = 'flex';
+        }
+        function closeProModal() {
+            document.getElementById('proModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
