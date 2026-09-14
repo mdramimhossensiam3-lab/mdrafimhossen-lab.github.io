@@ -18,61 +18,55 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
         .brand { font-size: 22px; font-weight: 800; color: #00dfd8; }
-        .live-badge { background: #ff0055; color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; animation: blink 1.5s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .live-badge { background: #ff0055; color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; width: 100%; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; width: 100%; }
         
-        .hero-box {
-            background: linear-gradient(135deg, #111328, #181c3c);
-            border: 2px solid rgba(0, 223, 216, 0.3);
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        /* Video Player Box */
+        .player-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #00dfd8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
         }
-        .hero-box h1 { font-size: 26px; color: #00dfd8; margin-bottom: 10px; }
-        .hero-box p { color: #9aa0c0; font-size: 15px; margin-bottom: 25px; }
-
-        .btn-watch {
-            display: inline-block;
-            background: linear-gradient(90deg, #ff0055, #ff5500);
-            color: #fff;
-            padding: 15px 35px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255,0,85,0.4);
+        .player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
-        .btn-watch:hover { transform: scale(1.05); }
 
-        .section-title { margin: 25px 0 15px 0; color: #00dfd8; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .section-title { margin: 20px 0 15px 0; color: #00dfd8; font-size: 18px; }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         
         .channel-card {
             background: #12142a;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
             color: #fff;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
         .channel-card:hover {
-            background: rgba(0, 223, 216, 0.1);
+            background: rgba(0, 223, 216, 0.15);
             border-color: #00dfd8;
-            transform: translateY(-3px);
         }
-        .channel-card span { font-size: 16px; font-weight: 600; }
-        .status-live { color: #ff0055; font-size: 12px; font-weight: bold; }
+        .channel-card span { font-size: 15px; font-weight: 600; }
+        .status-live { color: #ff0055; font-size: 11px; font-weight: bold; }
 
         footer { text-align: center; padding: 25px; font-size: 13px; color: #6b7280; border-top: 1px solid rgba(255,255,255,0.05); margin-top: auto; }
     </style>
@@ -81,48 +75,25 @@
 
     <header>
         <div class="brand">Rafim Live Hub 📺</div>
-        <div class="live-badge">🔴 24/7 LIVE TV</div>
+        <div class="live-badge">🔴 SITE PLAYER</div>
     </header>
 
     <div class="container">
-        <!-- Main Hero Box -->
-        <div class="hero-box">
-            <h1 id="selectedTitle">📺 সময় টিভি লাইভ (Somoy TV Live)</h1>
-            <p>নিচের বাটনে ক্লিক করে হাই-কোয়ালিটিতে সরাসরি লাইভ সংবাদ ও অনুষ্ঠান উপভোগ করুন।</p>
-            <a id="mainLiveBtn" href="url?id=1live/i8VSQO6TlFc?si=EHP5DkAqN49HTH7j" target="_blank" class="btn-watch">▶ সরাসরি লাইভ দেখুন</a>
+        <!-- Direct Video Player Screen -->
+        <div class="player-container">
+            <iframe id="mainPlayer" src="https://www.youtube.com/embed/i8VSQO6TlFc" allowfullscreen allow="autoplay"></iframe>
         </div>
 
-        <!-- News Channels -->
-        <div class="section-title">📰 বাংলাদেশের সংবাদ চ্যানেল (News Channels)</div>
+        <!-- Channels Grid -->
+        <div class="section-title">📰 চ্যানেল লিস্ট (ক্লিক করলে এখানেই চলবে)</div>
         <div class="grid">
-            <div class="channel-card" onclick="setChannel('সময় টিভি (Somoy TV)', 'https://www.youtube.com/live/i8VSQO6TlFc?si=EHP5DkAqN49HTH7j')">
+            <div class="channel-card" onclick="playVideo('i8VSQO6TlFc')">
                 <span>📺 সময় টিভি (Somoy TV)</span>
-                <span class="status-live">● LIVE NOW</span>
+                <span class="status-live">● PLAY HERE</span>
             </div>
-            <div class="channel-card" onclick="setChannel('যমুনা টিভি (Jamuna TV)', 'https://www.youtube.com/live/watch?v=live_jamuna_id')">
-                <span>📺 যমুনা টিভি (Jamuna TV)</span>
-                <span class="status-live">● LIVE NOW</span>
-            </div>
-            <div class="channel-card" onclick="setChannel('ইনডিপেন্ডেন্ট টিভি (Independent TV)', 'https://www.youtube.com/live/watch?v=live_independent_id')">
-                <span>📺 ইনডিপেন্ডেন্ট</span>
-                <span class="status-live">● LIVE NOW</span>
-            </div>
-            <div class="channel-card" onclick="setChannel('চ্যানেল ২৪ (Channel 24)', 'https://www.youtube.com/live/watch?v=live_channel24_id')">
-                <span>📺 চ্যানেল ২৪</span>
-                <span class="status-live">● LIVE NOW</span>
-            </div>
-        </div>
-
-        <!-- Sports Channels -->
-        <div class="section-title">⚽ খেলাধুলার লাইভ চ্যানেল (Sports Channels)</div>
-        <div class="grid">
-            <div class="channel-card" onclick="setChannel('টি স্পোর্টস (T Sports Live)', 'https://www.youtube.com/live/watch?v=live_tsports_id')">
-                <span>⚽ টি স্পোর্টস (T Sports)</span>
-                <span class="status-live">● LIVE MATCH</span>
-            </div>
-            <div class="channel-card" onclick="setChannel('জিটিভি (GTV Live)', 'https://www.youtube.com/live/watch?v=live_gtv_id')">
-                <span>🏏 গাজী টিভি (GTV)</span>
-                <span class="status-live">● LIVE MATCH</span>
+            <div class="channel-card" onclick="playVideo('L3w72SqX4ng')">
+                <span>📺 অন্য ভিডিও বা নিউজ</span>
+                <span class="status-live">● PLAY HERE</span>
             </div>
         </div>
     </div>
@@ -132,10 +103,9 @@
     </footer>
 
     <script>
-        function setChannel(channelName, channelUrl) {
-            document.getElementById('selectedTitle').innerText = `📺 ${channelName}`;
-            document.getElementById('mainLiveBtn').href = channelUrl;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function playVideo(videoId) {
+            const iframe = document.getElementById('mainPlayer');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
         }
     </script>
 </body>
