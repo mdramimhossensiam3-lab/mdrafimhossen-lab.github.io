@@ -1,244 +1,416 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realistic AI Photo Studio</title>
+    <title>CyberArcade - Mini Gaming Gateway</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        header h1 {
-            font-size: 2.2rem;
-            color: #38bdf8;
-            margin-bottom: 8px;
-        }
-        header p {
-            color: #94a3b8;
-            font-size: 1rem;
-        }
-        .container {
-            background: #1e293b;
-            width: 100%;
-            max-width: 900px;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-        .input-section, .output-section {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-        textarea, select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #0f172a;
+            background-color: #0d0e15;
             color: #fff;
-            font-size: 0.95rem;
-            outline: none;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        textarea {
-            resize: vertical;
-            min-height: 100px;
+        /* Navbar */
+        header {
+            background: rgba(22, 24, 37, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        input[type="file"] {
-            display: none;
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff007f, #7928ca, #00dfd8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .upload-btn {
-            background: #334155;
-            color: #e2e8f0;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
+        nav button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 20px;
             cursor: pointer;
-            border: 1px dashed #64748b;
+            margin-left: 10px;
             transition: 0.3s;
+            font-weight: 600;
         }
-        .upload-btn:hover {
-            background: #475569;
+        nav button:hover, nav button.active {
+            background: #ff007f;
+            border-color: #ff007f;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
         }
-        .btn-submit {
-            background: linear-gradient(135deg, #0284c7, #2563eb);
+
+        /* Container */
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Game Sections */
+        .game-card {
+            display: none;
+            background: rgba(22, 24, 37, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .game-card.active {
+            display: block;
+        }
+        .game-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #00dfd8;
+        }
+        .score-board {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #aaa;
+        }
+        .score-board span {
+            color: #ff007f;
+            font-weight: bold;
+        }
+
+        /* Controls */
+        .btn {
+            background: linear-gradient(45deg, #7928ca, #ff007f);
             color: white;
-            padding: 14px;
             border: none;
+            padding: 10px 24px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 1rem;
             cursor: pointer;
+            margin-top: 15px;
             transition: 0.3s;
         }
-        .btn-submit:hover {
-            opacity: 0.9;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4);
         }
-        .preview-box {
-            width: 100%;
-            height: 260px;
-            background: #0f172a;
-            border-radius: 8px;
-            border: 1px solid #334155;
+
+        /* 1. Snake Canvas */
+        #snakeCanvas {
+            background: #05060a;
+            border: 2px solid #7928ca;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(121, 40, 202, 0.3);
+            max-width: 100%;
+        }
+
+        /* 2. Tic Tac Toe Grid */
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .ttt-cell {
+            width: 100px;
+            height: 100px;
+            background: #161825;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-        .preview-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .placeholder-text {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        .btn-download {
-            background: #16a34a;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
+            font-size: 36px;
             font-weight: bold;
-            display: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .ttt-cell:hover {
+            background: #22253b;
+        }
+        .ttt-cell.x { color: #ff007f; }
+        .ttt-cell.o { color: #00dfd8; }
+
+        /* 3. Memory Game */
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            grid-gap: 12px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .memory-card {
+            width: 80px;
+            height: 80px;
+            background: #161825;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+        .memory-card.flipped {
+            background: #252945;
+            transform: rotateY(180deg);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>AI Realistic Photo Studio</h1>
-        <p>বাস্তবসম্মত প্রফেশনাল AI ছবি তৈরি করুন</p>
+        <div class="logo">CyberArcade 🎮</div>
+        <nav>
+            <button class="nav-btn active" onclick="switchGame('snake')">Snake</button>
+            <button class="nav-btn" onclick="switchGame('ttt')">Tic-Tac-Toe</button>
+            <button class="nav-btn" onclick="switchGame('memory')">Memory Card</button>
+        </nav>
     </header>
 
-    <div class="container">
-        <!-- Input Section -->
-        <div class="input-section">
-            <div class="form-group">
-                <label>আপনার মূল ছবি আপলোড করুন:</label>
-                <label for="fileUpload" class="upload-btn" id="uploadLabel">📷 ছবি নির্বাচন করুন</label>
-                <input type="file" id="fileUpload" accept="image/*" onchange="previewSourceImage(event)">
-            </div>
+    <div class="main-container">
 
-            <div class="form-group">
-                <label>ছবি স্টাইল (Style):</label>
-                <select id="styleSelect">
-                    <option value="photorealistic portrait, DSLR camera shot, 85mm lens, natural lighting, sharp focus, highly detailed skin texture, real life photography">📸 প্রফেশনাল রিয়েলিস্টিক ছবি (DSLR Look)</option>
-                    <option value="cinematic photography, soft natural daylight, shallow depth of field, masterpiece portrait">🎬 সিনেমাটিক পোর্ট্রেট (Cinematic)</option>
-                    <option value="cyberpunk style, neon lights, futuristic fashion">🌆 সাইবারপাঙ্ক (Cyberpunk)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="prompt">অতিরিক্ত তথ্য (English Prompt):</label>
-                <textarea id="prompt" placeholder="Example: A young Bangladeshi man in a blue blazer, outdoor university campus background..."></textarea>
-            </div>
-
-            <button class="btn-submit" onclick="generateAIImage()">✨ AI ছবি জেনারেট করুন</button>
+        <!-- Snake Game Card -->
+        <div id="snake" class="game-card active">
+            <h2 class="game-title">Neon Snake</h2>
+            <div class="score-board">Score: <span id="snakeScore">0</span></div>
+            <canvas id="snakeCanvas" width="400" height="400"></canvas>
+            <br>
+            <button class="btn" onclick="resetSnake()">Restart Game</button>
         </div>
 
-        <!-- Output Section -->
-        <div class="output-section">
-            <label>আপলোড করা ছবি:</label>
-            <div class="preview-box">
-                <span class="placeholder-text" id="srcPlaceholder">কোনো ছবি আপলোড করা হয়নি</span>
-                <img id="sourcePreview" style="display:none;">
-            </div>
-
-            <label>AI দ্বারা তৈরি নতুন ছবি:</label>
-            <div class="preview-box">
-                <span class="placeholder-text" id="resultPlaceholder">জেনারেট করা ছবি এখানে দেখাবে</span>
-                <img id="resultImage" style="display:none;">
-            </div>
-
-            <a id="downloadBtn" class="btn-download" target="_blank" download="ai-generated-image.jpg">📥 ছবি ডাউনলোড করুন</a>
+        <!-- Tic Tac Toe Card -->
+        <div id="ttt" class="game-card">
+            <h2 class="game-title">Tic-Tac-Toe (vs AI)</h2>
+            <div class="score-board" id="tttStatus">Your turn (X)</div>
+            <div class="ttt-board" id="tttBoard"></div>
+            <button class="btn" onclick="resetTTT()">Restart Game</button>
         </div>
+
+        <!-- Memory Match Card -->
+        <div id="memory" class="game-card">
+            <h2 class="game-title">Memory Match</h2>
+            <div class="score-board">Moves: <span id="memoryMoves">0</span></div>
+            <div class="memory-board" id="memoryBoard"></div>
+            <button class="btn" onclick="resetMemory()">Restart Game</button>
+        </div>
+
     </div>
 
     <script>
-        function previewSourceImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('sourcePreview');
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    document.getElementById('srcPlaceholder').style.display = 'none';
-                    document.getElementById('uploadLabel').innerText = "✓ " + file.name;
+        // Switch between games
+        function switchGame(gameId) {
+            document.querySelectorAll('.game-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(gameId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (gameId === 'snake') resetSnake();
+            if (gameId === 'ttt') resetTTT();
+            if (gameId === 'memory') resetMemory();
+        }
+
+        /* --- 1. SNAKE GAME ENGINE --- */
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
+        const grid = 20;
+        let snake = [{x: 160, y: 160}];
+        let dx = grid, dy = 0;
+        let food = {x: 320, y: 320};
+        let snakeScore = 0;
+        let gameInterval;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -grid; }
+            if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = grid; }
+            if (e.key === 'ArrowLeft' && dx === 0) { dx = -grid; dy = 0; }
+            if (e.key === 'ArrowRight' && dx === 0) { dx = grid; dy = 0; }
+        });
+
+        function runSnake() {
+            gameInterval = setInterval(() => {
+                const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+                // Wall collision
+                if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                    return resetSnake();
                 }
-                reader.readAsDataURL(file);
+
+                // Self collision
+                for (let part of snake) {
+                    if (part.x === head.x && part.y === head.y) return resetSnake();
+                }
+
+                snake.unshift(head);
+
+                // Eat Food
+                if (head.x === food.x && head.y === food.y) {
+                    snakeScore += 10;
+                    document.getElementById('snakeScore').innerText = snakeScore;
+                    food = {
+                        x: Math.floor(Math.random() * (canvas.width / grid)) * grid,
+                        y: Math.floor(Math.random() * (canvas.height / grid)) * grid
+                    };
+                } else {
+                    snake.pop();
+                }
+
+                // Draw
+                ctx.fillStyle = '#05060a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ff007f';
+                ctx.fillRect(food.x, food.y, grid - 2, grid - 2);
+
+                ctx.fillStyle = '#00dfd8';
+                snake.forEach(part => ctx.fillRect(part.x, part.y, grid - 2, grid - 2));
+            }, 100);
+        }
+
+        function resetSnake() {
+            clearInterval(gameInterval);
+            snake = [{x: 160, y: 160}];
+            dx = grid; dy = 0;
+            snakeScore = 0;
+            document.getElementById('snakeScore').innerText = 0;
+            runSnake();
+        }
+
+        /* --- 2. TIC TAC TOE ENGINE --- */
+        let tttState = Array(9).fill(null);
+        const tttBoard = document.getElementById('tttBoard');
+
+        function resetTTT() {
+            tttState = Array(9).fill(null);
+            document.getElementById('tttStatus').innerText = "Your turn (X)";
+            renderTTT();
+        }
+
+        function renderTTT() {
+            tttBoard.innerHTML = '';
+            tttState.forEach((cell, index) => {
+                const div = document.createElement('div');
+                div.className = `ttt-cell ${cell ? cell.toLowerCase() : ''}`;
+                div.innerText = cell || '';
+                div.onclick = () => playerTTTMove(index);
+                tttBoard.appendChild(div);
+            });
+        }
+
+        function playerTTTMove(i) {
+            if (tttState[i] || checkTTTWinner(tttState)) return;
+            tttState[i] = 'X';
+            renderTTT();
+
+            if (!checkTTTWinner(tttState) && tttState.includes(null)) {
+                document.getElementById('tttStatus').innerText = "AI thinking...";
+                setTimeout(aiTTTMove, 400);
             }
         }
 
-        function generateAIImage() {
-            const style = document.getElementById('styleSelect').value;
-            const promptText = document.getElementById('prompt').value.trim();
-            const resultImg = document.getElementById('resultImage');
-            const resultPlaceholder = document.getElementById('resultPlaceholder');
-            const downloadBtn = document.getElementById('downloadBtn');
-
-            if (!promptText) {
-                alert("দয়া করে ছবি সম্পর্কে বিবরণ (English Prompt) লিখুন!");
-                return;
+        function aiTTTMove() {
+            let emptyIndices = tttState.map((val, idx) => val === null ? idx : null).filter(val => val !== null);
+            if (emptyIndices.length > 0) {
+                let randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                tttState[randomIndex] = 'O';
+                renderTTT();
+                
+                let winner = checkTTTWinner(tttState);
+                if (winner) {
+                    document.getElementById('tttStatus').innerText = winner === 'Tie' ? "It's a Tie!" : `${winner} Wins!`;
+                } else {
+                    document.getElementById('tttStatus').innerText = "Your turn (X)";
+                }
             }
-
-            const fullPrompt = `${promptText}, ${style}`;
-
-            resultPlaceholder.style.display = 'block';
-            resultPlaceholder.innerText = "রিয়েলিস্টিক AI ছবি তৈরি হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...";
-            resultImg.style.display = 'none';
-            downloadBtn.style.display = 'none';
-
-            const seed = Math.floor(Math.random() * 100000);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?seed=${seed}&width=1024&height=1024&nologo=true&model=flux`;
-
-            const tempImg = new Image();
-            tempImg.onload = function() {
-                resultImg.src = imageUrl;
-                resultImg.style.display = 'block';
-                resultPlaceholder.style.display = 'none';
-
-                downloadBtn.href = imageUrl;
-                downloadBtn.style.display = 'block';
-            };
-            tempImg.onerror = function() {
-                resultPlaceholder.innerText = "ছবি তৈরি করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।";
-            };
-            tempImg.src = imageUrl;
         }
+
+        function checkTTTWinner(board) {
+            const wins = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            for (let [a,b,c] of wins) {
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) return board[a];
+            }
+            return board.includes(null) ? null : 'Tie';
+        }
+
+        /* --- 3. MEMORY MATCH ENGINE --- */
+        const emojis = ['🚀', '🛸', '👾', '🎮', '🚀', '🛸', '👾', '🎮'];
+        let memoryCards = [];
+        let flippedCards = [];
+        let moves = 0;
+
+        function resetMemory() {
+            moves = 0;
+            document.getElementById('memoryMoves').innerText = moves;
+            flippedCards = [];
+            memoryCards = [...emojis].sort(() => 0.5 - Math.random());
+            const board = document.getElementById('memoryBoard');
+            board.innerHTML = '';
+            
+            memoryCards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.emoji = emoji;
+                card.dataset.index = index;
+                card.onclick = () => flipMemoryCard(card);
+                board.appendChild(card);
+            });
+        }
+
+        function flipMemoryCard(card) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                card.innerText = card.dataset.emoji;
+                flippedCards.push(card);
+
+                if (flippedCards.length === 2) {
+                    moves++;
+                    document.getElementById('memoryMoves').innerText = moves;
+                    checkMemoryMatch();
+                }
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.emoji === c2.dataset.emoji) {
+                flippedCards = [];
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c1.innerText = '';
+                    c2.classList.remove('flipped');
+                    c2.innerText = '';
+                    flippedCards = [];
+                }, 800);
+            }
+        }
+
+        // Initialize First Game
+        runSnake();
+        resetTTT();
+        resetMemory();
     </script>
 </body>
 </html>
