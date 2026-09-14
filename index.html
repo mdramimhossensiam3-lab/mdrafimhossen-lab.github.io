@@ -3,291 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberArcade FC Pro - 10 Working Games</title>
+    <title>Rafim - User & NID Verification Portal</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #080912; color: #fff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #090a16;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
         header {
-            background: rgba(15, 16, 30, 0.95);
-            padding: 15px 30px;
+            background: rgba(16, 18, 38, 0.95);
+            padding: 18px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(0, 223, 216, 0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-        .logo { font-size: 24px; font-weight: 800; background: linear-gradient(45deg, #00dfd8, #00ff66); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .main-container { display: flex; flex: 1; height: calc(100vh - 65px); }
-        
-        .sidebar {
-            width: 260px;
-            background: #0d0e1b;
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px 10px;
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00dfd8, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tagline {
+            color: #8a8fae;
+            font-size: 13px;
+        }
+        .main-container {
+            flex: 1;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
         }
-        .game-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #a0a5c0;
-            padding: 12px 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: left;
+        .card {
+            background: #111325;
+            border: 1px solid rgba(0, 223, 216, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+        .card h2 {
+            font-size: 22px;
+            color: #00dfd8;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .card p {
+            color: #9aa0c0;
             font-size: 14px;
-            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #d1d5db;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #090a16;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
             transition: 0.3s;
         }
-        .game-btn:hover { background: rgba(0, 223, 216, 0.1); color: #00dfd8; }
-        .game-btn.active { background: linear-gradient(135deg, #00dfd8, #0072ff); color: #fff; font-weight: bold; border-color: transparent; }
-
-        .dashboard { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; background: #080912; }
-        .game-screen { display: none; width: 100%; height: 100%; position: relative; flex-direction: column; justify-content: center; align-items: center; }
-        .game-screen.active { display: flex; }
-
-        canvas { background: #05050a; border: 2px solid #00dfd8; border-radius: 12px; box-shadow: 0 0 20px rgba(0, 223, 216, 0.2); }
-
-        .ui-box {
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 18px;
+        .form-group input:focus {
+            border-color: #00dfd8;
+            box-shadow: 0 0 10px rgba(0, 223, 216, 0.2);
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #00dfd8, #0072ff);
+            border: none;
             border-radius: 8px;
-            border: 1px solid rgba(0, 223, 216, 0.4);
-            font-size: 15px;
-            color: #00dfd8;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-submit:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+            text-align: center;
+        }
+        .status-box.success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+        .status-box.error {
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid #ff0055;
+            color: #ff0055;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: #6b7280;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">CyberArcade FC Pro ⚽</div>
-        <div style="color: #888; font-size: 14px;">10 High-Level Games Hub</div>
+        <div>
+            <div class="brand">Rafim Systems</div>
+            <div class="tagline">Identity & User Verification Portal</div>
+        </div>
     </header>
 
     <div class="main-container">
-        <div class="sidebar">
-            <button class="game-btn active" onclick="switchGame('football')">⚽ FC Football 3D</button>
-            <button class="game-btn" onclick="switchGame('car')">🏎️ 3D Highway Racer</button>
-            <button class="game-btn" onclick="switchGame('cricket')">🏏 Cyber Cricket</button>
-            <button class="game-btn" onclick="switchGame('basketball')">🏀 Street Basketball</button>
-            <button class="game-btn" onclick="switchGame('jet')">✈️ Jet Fighter</button>
-            <button class="game-btn" onclick="switchGame('pool')">🎱 8-Ball Pool</button>
-            <button class="game-btn" onclick="switchGame('space')">🚀 Space Attacker</button>
-            <button class="game-btn" onclick="switchGame('ninja')">🥷 Ninja Runner</button>
-            <button class="game-btn" onclick="switchGame('colors')">🧩 Color Switch</button>
-            <button class="game-btn" onclick="switchGame('block')">🧱 Block Breaker</button>
-        </div>
+        <div class="card">
+            <h2>NID & User Verification</h2>
+            <p>আপনার ১০/১৭ ডিজিটের NID নম্বর ও ফোন নম্বর দিয়ে ভেরিফিকেশন সম্পন্ন করুন</p>
 
-        <div class="dashboard">
+            <form id="verifyForm">
+                <div class="form-group">
+                    <label>পূর্ণ নাম (Full Name)</label>
+                    <input type="text" id="fullName" placeholder="যেমন: Rafim Hossen" required>
+                </div>
 
-            <!-- 1. FC FOOTBALL 3D -->
-            <div id="football" class="game-screen active">
-                <div class="ui-box">⚽ FC Football: Drag/Click ball to score goal!</div>
-                <canvas id="footballCanvas" width="650" height="420"></canvas>
-            </div>
+                <div class="form-group">
+                    <label>মোবাইল নম্বর (Phone Number)</label>
+                    <input type="tel" id="phone" placeholder="017XXXXXXXX" required>
+                </div>
 
-            <!-- 2. 3D CAR RACER -->
-            <div id="car" class="game-screen">
-                <div class="ui-box">🏎️ Car Race: Use Left/Right arrows to steer!</div>
-                <canvas id="carCanvas" width="650" height="420"></canvas>
-            </div>
+                <div class="form-group">
+                    <label>এনআইডি নম্বর (NID Number)</label>
+                    <input type="text" id="nid" placeholder="১০ বা ১৭ ডিজিটের NID লিখুন" required>
+                </div>
 
-            <!-- 3. CYBER CRICKET -->
-            <div id="cricket" class="game-screen">
-                <div class="ui-box">🏏 Cricket: Press Spacebar when ball is near bat!</div>
-                <canvas id="cricketCanvas" width="650" height="420"></canvas>
-            </div>
+                <button type="submit" class="btn-submit">Submit Verification</button>
+            </form>
 
-            <!-- 4. BASKETBALL -->
-            <div id="basketball" class="game-screen">
-                <div class="ui-box">🏀 Basketball: Click & Drag ball to throw into hoop!</div>
-                <canvas id="basketCanvas" width="650" height="420"></canvas>
-            </div>
-
-            <!-- 5. JET FIGHTER -->
-            <div id="jet" class="game-screen">
-                <div class="ui-box">✈️ Jet Fighter: Move mouse to shoot targets!</div>
-                <canvas id="jetCanvas" width="650" height="420"></canvas>
-            </div>
-
-            <!-- 6. 8-BALL POOL -->
-            <div id="pool" class="game-screen">
-                <div class="ui-box">🎱 8-Ball Pool: Drag white cue ball to hit targets!</div>
-                <canvas id="poolCanvas" width="650" height="420"></canvas>
-            </div>
-
-            <!-- 7. SPACE ATTACKER -->
-            <div id="space" class="game-screen">
-                <div class="ui-box">🚀 Space: Left/Right arrows to steer, Space to shoot!</div>
-                <canvas id="spaceCanvas" width="650" height="420"></canvas>
-            </div>
-
-            <!-- 8. NINJA RUNNER -->
-            <div id="ninja" class="game-screen">
-                <div class="ui-box">🥷 Ninja Runner: Press Spacebar to jump over obstacles!</div>
-                <canvas id="ninjaCanvas" width="650" height="420"></canvas>
-            </div>
-
-            <!-- 9. COLOR SWITCH -->
-            <div id="colors" class="game-screen">
-                <div class="ui-box">🧩 Color Switch: Tap Spacebar to keep ball jumping!</div>
-                <canvas id="colorCanvas" width="650" height="420"></canvas>
-            </div>
-
-            <!-- 10. BLOCK BREAKER -->
-            <div id="block" class="game-screen">
-                <div class="ui-box">🧱 Block Breaker: Move mouse left/right to catch ball!</div>
-                <canvas id="blockCanvas" width="650" height="420"></canvas>
-            </div>
-
+            <div id="statusBox" class="status-box"></div>
         </div>
     </div>
 
+    <footer>
+        &copy; 2026 Rafim Systems. All Rights Reserved. Secure Identity Verification Service.
+    </footer>
+
     <script>
-        let currentGame = 'football';
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        function switchGame(id) {
-            document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const nid = document.getElementById('nid').value.trim();
+            const statusBox = document.getElementById('statusBox');
+
+            statusBox.style.display = 'block';
+
+            // Phone Validation
+            const phoneRegex = /^01[3-9]\d{8}$/;
+            if (!phoneRegex.test(phone)) {
+                statusBox.className = 'status-box error';
+                statusBox.innerText = '⚠️ সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন: 017XXXXXXXX)';
+                return;
+            }
+
+            // NID Validation (10 or 17 digits)
+            if (nid.length !== 10 && nid.length !== 17) {
+                statusBox.className = 'status-box error';
+                statusBox.innerText = '⚠️ NID নম্বর অবশ্যই ১০ অথবা ১৭ ডিজিটের হতে হবে।';
+                return;
+            }
+
+            // Success Response Simulation
+            statusBox.className = 'status-box success';
+            statusBox.innerText = `✅ ধন্যবাদ ${name}! আপনার NID (${nid}) ভেরিফিকেশন রিকোয়েস্ট সফলভাবে জমা হয়েছে।`;
             
-            document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
-            currentGame = id;
-        }
-
-        /* Keyboard Controls */
-        let keys = {};
-        window.addEventListener('keydown', e => keys[e.key] = true);
-        window.addEventListener('keyup', e => keys[e.key] = false);
-
-        /* 1. FOOTBALL GAME */
-        const ftCanvas = document.getElementById('footballCanvas');
-        const ftCtx = ftCanvas.getContext('2d');
-        let ballX = 325, ballY = 350, ballRadius = 15, isShooting = false;
-        let keeperX = 300, keeperSpeed = 3;
-
-        function runFootball() {
-            ftCtx.clearRect(0, 0, ftCanvas.width, ftCanvas.height);
-
-            // Field Pitch
-            ftCtx.fillStyle = '#1e7e34';
-            ftCtx.fillRect(0, 0, ftCanvas.width, ftCanvas.height);
-
-            // Goal Net
-            ftCtx.strokeStyle = '#ffffff';
-            ftCtx.lineWidth = 4;
-            ftCtx.strokeRect(200, 30, 250, 80);
-
-            // Goalkeeper
-            ftCtx.fillStyle = '#ff0055';
-            ftCtx.fillRect(keeperX, 70, 50, 15);
-            keeperX += keeperSpeed;
-            if (keeperX > 400 || keeperX < 200) keeperSpeed *= -1;
-
-            // Ball
-            ftCtx.beginPath();
-            ftCtx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-            ftCtx.fillStyle = '#ffffff';
-            ftCtx.fill();
-            ftCtx.strokeStyle = '#000';
-            ftCtx.stroke();
-
-            if (isShooting) {
-                ballY -= 7;
-                if (ballY < 90) {
-                    if (ballX > keeperX && ballX < keeperX + 50) {
-                        alert("SAVED BY GOALKEEPER!");
-                    } else if (ballX > 200 && ballX < 450) {
-                        alert("GOAL! FC Football Champion!");
-                    }
-                    ballY = 350; ballX = 325; isShooting = false;
-                }
-            }
-
-            requestAnimationFrame(runFootball);
-        }
-        ftCanvas.addEventListener('click', (e) => {
-            if (!isShooting) {
-                const rect = ftCanvas.getBoundingClientRect();
-                ballX = e.clientX - rect.left;
-                isShooting = true;
-            }
+            // Clear inputs
+            document.getElementById('verifyForm').reset();
         });
-
-        /* 2. CAR GAME */
-        const carCanvas = document.getElementById('carCanvas');
-        const carCtx = carCanvas.getContext('2d');
-        let playerCarX = 300, enemyCarY = -100, enemyCarX = 300;
-
-        function runCar() {
-            carCtx.fillStyle = '#111';
-            carCtx.fillRect(0, 0, carCanvas.width, carCanvas.height);
-
-            // Road Lines
-            carCtx.strokeStyle = '#00dfd8';
-            carCtx.setLineDash([20, 20]);
-            carCtx.beginPath(); carCtx.moveTo(325, 0); carCtx.lineTo(325, 420); carCtx.stroke();
-
-            // Player Car
-            if (keys['ArrowLeft'] && playerCarX > 100) playerCarX -= 5;
-            if (keys['ArrowRight'] && playerCarX < 500) playerCarX += 5;
-
-            carCtx.fillStyle = '#00dfd8';
-            carCtx.fillRect(playerCarX, 330, 40, 70);
-
-            // Enemy Car
-            enemyCarY += 5;
-            if (enemyCarY > 420) { enemyCarY = -100; enemyCarX = 150 + Math.random() * 300; }
-            carCtx.fillStyle = '#ff0055';
-            carCtx.fillRect(enemyCarX, enemyCarY, 40, 70);
-
-            requestAnimationFrame(runCar);
-        }
-
-        /* 10. BLOCK BREAKER GAME */
-        const blCanvas = document.getElementById('blockCanvas');
-        const blCtx = blCanvas.getContext('2d');
-        let paddleX = 275, bX = 325, bY = 200, bDx = 3, bDy = -3;
-
-        blCanvas.addEventListener('mousemove', (e) => {
-            const rect = blCanvas.getBoundingClientRect();
-            paddleX = e.clientX - rect.left - 50;
-        });
-
-        function runBlock() {
-            blCtx.clearRect(0, 0, blCanvas.width, blCanvas.height);
-
-            // Paddle
-            blCtx.fillStyle = '#00dfd8';
-            blCtx.fillRect(paddleX, 390, 100, 15);
-
-            // Ball
-            blCtx.beginPath();
-            blCtx.arc(bX, bY, 8, 0, Math.PI * 2);
-            blCtx.fillStyle = '#ff0055';
-            blCtx.fill();
-
-            bX += bDx; bY += bDy;
-            if (bX < 10 || bX > blCanvas.width - 10) bDx *= -1;
-            if (bY < 10) bDy *= -1;
-
-            if (bY > 380 && bX > paddleX && bX < paddleX + 100) bDy *= -1;
-            if (bY > 420) { bX = 325; bY = 200; }
-
-            requestAnimationFrame(runBlock);
-        }
-
-        // Start Loops
-        runFootball();
-        runCar();
-        runBlock();
     </script>
 </body>
 </html>
