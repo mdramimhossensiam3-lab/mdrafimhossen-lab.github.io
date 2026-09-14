@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberArcade - Mini Gaming Gateway</title>
+    <title>CyberArcade Pro - High Level Gaming Hub</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,165 +12,141 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0d0e15;
+            background-color: #08090f;
             color: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
-        /* Navbar */
         header {
-            background: rgba(22, 24, 37, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 18px 40px;
+            background: rgba(13, 14, 25, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             position: sticky;
             top: 0;
             z-index: 100;
         }
         .logo {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
             background: linear-gradient(45deg, #ff007f, #7928ca, #00dfd8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
         }
-        nav button {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-left: 10px;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-        nav button:hover, nav button.active {
-            background: #ff007f;
-            border-color: #ff007f;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
-        }
-
-        /* Container */
-        .main-container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-            width: 100%;
+        .main-layout {
+            display: flex;
             flex: 1;
+            height: calc(100vh - 70px);
         }
-
-        /* Game Sections */
-        .game-card {
-            display: none;
-            background: rgba(22, 24, 37, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
+        /* Sidebar Menu */
+        .sidebar {
+            width: 280px;
+            background: #0d0e19;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .menu-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #8c90b0;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        .menu-btn:hover {
+            background: rgba(255, 0, 127, 0.05);
+            color: #ff007f;
+            border-color: rgba(255, 0, 127, 0.2);
+        }
+        .menu-btn.active {
+            background: linear-gradient(135deg, #7928ca, #ff007f);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.3);
+        }
+        /* Game Dashboard Screen */
+        .dashboard {
+            flex: 1;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #141525 0%, #08090f 100%);
+            overflow-y: auto;
+        }
+        .game-panel {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background: rgba(20, 21, 37, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
         }
-        .game-card.active {
-            display: block;
+        .game-panel.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .game-title {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 26px;
             color: #00dfd8;
+            margin-bottom: 5px;
+            text-shadow: 0 0 8px rgba(0, 223, 216, 0.3);
         }
-        .score-board {
+        .game-desc {
+            font-size: 13px;
+            color: #8c90b0;
+            margin-bottom: 15px;
+        }
+        .score-display {
             font-size: 18px;
-            margin-bottom: 20px;
-            color: #aaa;
-        }
-        .score-board span {
+            margin-bottom: 15px;
             color: #ff007f;
             font-weight: bold;
         }
-
-        /* Controls */
-        .btn {
-            background: linear-gradient(45deg, #7928ca, #ff007f);
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4);
-        }
-
-        /* 1. Snake Canvas */
-        #snakeCanvas {
-            background: #05060a;
+        canvas {
+            background: #05050a;
             border: 2px solid #7928ca;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(121, 40, 202, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(121, 40, 202, 0.2);
             max-width: 100%;
         }
-
-        /* 2. Tic Tac Toe Grid */
-        .ttt-board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-gap: 10px;
-            justify-content: center;
-            margin: 20px auto;
-        }
-        .ttt-cell {
-            width: 100px;
-            height: 100px;
-            background: #161825;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 36px;
+        .btn-restart {
+            margin-top: 15px;
+            background: linear-gradient(90deg, #ff007f, #00dfd8);
+            border: none;
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 30px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .ttt-cell:hover {
-            background: #22253b;
-        }
-        .ttt-cell.x { color: #ff007f; }
-        .ttt-cell.o { color: #00dfd8; }
-
-        /* 3. Memory Game */
-        .memory-board {
-            display: grid;
-            grid-template-columns: repeat(4, 80px);
-            grid-gap: 12px;
-            justify-content: center;
-            margin: 20px auto;
-        }
-        .memory-card {
-            width: 80px;
-            height: 80px;
-            background: #161825;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            cursor: pointer;
-            user-select: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s;
-        }
-        .memory-card.flipped {
-            background: #252945;
-            transform: rotateY(180deg);
+        .btn-restart:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
         }
     </style>
 </head>
@@ -178,239 +154,398 @@
 
     <header>
         <div class="logo">CyberArcade 🎮</div>
-        <nav>
-            <button class="nav-btn active" onclick="switchGame('snake')">Snake</button>
-            <button class="nav-btn" onclick="switchGame('ttt')">Tic-Tac-Toe</button>
-            <button class="nav-btn" onclick="switchGame('memory')">Memory Card</button>
-        </nav>
+        <div style="font-size: 14px; color: #8c90b0;">High Level Original Gaming Core</div>
     </header>
 
-    <div class="main-container">
-
-        <!-- Snake Game Card -->
-        <div id="snake" class="game-card active">
-            <h2 class="game-title">Neon Snake</h2>
-            <div class="score-board">Score: <span id="snakeScore">0</span></div>
-            <canvas id="snakeCanvas" width="400" height="400"></canvas>
-            <br>
-            <button class="btn" onclick="resetSnake()">Restart Game</button>
+    <div class="main-layout">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <button class="menu-btn active" onclick="switchGame('snake')">🐍 Neon Snake</button>
+            <button class="menu-btn" onclick="switchGame('car')">🏎️ Synthwave Rider (Car)</button>
+            <button class="menu-btn" onclick="switchGame('gravity')">🌌 Gravity Flip</button>
+            <button class="menu-btn" onclick="switchGame('defender')">🛡️ Orbit Defender</button>
+            <button class="menu-btn" onclick="switchGame('stack')">🏗️ Tower Stack</button>
+            <button class="menu-btn" onclick="switchGame('catch')">🌠 Cosmic Catch</button>
         </div>
 
-        <!-- Tic Tac Toe Card -->
-        <div id="ttt" class="game-card">
-            <h2 class="game-title">Tic-Tac-Toe (vs AI)</h2>
-            <div class="score-board" id="tttStatus">Your turn (X)</div>
-            <div class="ttt-board" id="tttBoard"></div>
-            <button class="btn" onclick="resetTTT()">Restart Game</button>
-        </div>
+        <!-- Gameplay Dashboard -->
+        <div class="dashboard">
 
-        <!-- Memory Match Card -->
-        <div id="memory" class="game-card">
-            <h2 class="game-title">Memory Match</h2>
-            <div class="score-board">Moves: <span id="memoryMoves">0</span></div>
-            <div class="memory-board" id="memoryBoard"></div>
-            <button class="btn" onclick="resetMemory()">Restart Game</button>
-        </div>
+            <!-- 1. NEON SNAKE -->
+            <div id="snake" class="game-panel active">
+                <h2 class="game-title">Neon Snake</h2>
+                <div class="game-desc">Avoid barriers, grab Neon pills. Arrow keys to steer.</div>
+                <div class="score-display">Score: <span id="snakeScore">0</span></div>
+                <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                <button class="btn-restart" onclick="resetSnake()">Restart Mission</button>
+            </div>
 
+            <!-- 2. SYNTHWAVE RIDER (Car game) -->
+            <div id="car" class="game-panel">
+                <h2 class="game-title">Synthwave Rider (Car)</h2>
+                <div class="game-desc">Use A/D or Left/Right arrows to move. Avoid oncoming barricades.</div>
+                <div class="score-display">Distance: <span id="carScore">0</span> km</div>
+                <canvas id="carCanvas" width="400" height="400"></canvas>
+                <button class="btn-restart" onclick="resetCar()">Jump Back in Car</button>
+            </div>
+
+            <!-- 3. GRAVITY FLIP -->
+            <div id="gravity" class="game-panel">
+                <h2 class="game-title">Gravity Flip</h2>
+                <div class="game-desc">Spacebar or Tap to flip Gravity! Avoid upper & lower spikes.</div>
+                <div class="score-display">Distance: <span id="gravityScore">0</span></div>
+                <canvas id="gravityCanvas" width="400" height="350"></canvas>
+                <button class="btn-restart" onclick="resetGravity()">Play Again</button>
+            </div>
+
+            <!-- 4. ORBIT DEFENDER -->
+            <div id="defender" class="game-panel">
+                <h2 class="game-title">Orbit Defender</h2>
+                <div class="game-desc">Rotate your barrier with Arrow Keys to blast falling meteors.</div>
+                <div class="score-display">Kills: <span id="defenderScore">0</span></div>
+                <canvas id="defenderCanvas" width="400" height="400"></canvas>
+                <button class="btn-restart" onclick="resetDefender()">Restart Shield</button>
+            </div>
+
+            <!-- 5. TOWER STACK -->
+            <div id="stack" class="game-panel">
+                <h2 class="game-title">Tower Stack</h2>
+                <div class="game-desc">Space / Click to drop sliding blocks. Perfectly stack them high!</div>
+                <div class="score-display">Blocks: <span id="stackScore">0</span></div>
+                <canvas id="stackCanvas" width="400" height="420"></canvas>
+                <button class="btn-restart" onclick="resetStack()">Rebuild Tower</button>
+            </div>
+
+            <!-- 6. COSMIC CATCH -->
+            <div id="catch" class="game-panel">
+                <h2 class="game-title">Cosmic Catch</h2>
+                <div class="game-desc">Use A/D or Arrows to steer collector box and catch cosmic balls.</div>
+                <div class="score-display">Energy Caught: <span id="catchScore">0</span></div>
+                <canvas id="catchCanvas" width="400" height="400"></canvas>
+                <button class="btn-restart" onclick="resetCatch()">Relaunch</button>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // Switch between games
+        // Global switch
+        let activeGame = 'snake';
         function switchGame(gameId) {
-            document.querySelectorAll('.game-card').forEach(card => card.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
             
             document.getElementById(gameId).classList.add('active');
             event.target.classList.add('active');
+            activeGame = gameId;
 
+            stopAllGameLoops();
             if (gameId === 'snake') resetSnake();
-            if (gameId === 'ttt') resetTTT();
-            if (gameId === 'memory') resetMemory();
+            if (gameId === 'car') resetCar();
+            if (gameId === 'gravity') resetGravity();
+            if (gameId === 'defender') resetDefender();
+            if (gameId === 'stack') resetStack();
+            if (gameId === 'catch') resetCatch();
         }
 
-        /* --- 1. SNAKE GAME ENGINE --- */
-        const canvas = document.getElementById('snakeCanvas');
-        const ctx = canvas.getContext('2d');
-        const grid = 20;
-        let snake = [{x: 160, y: 160}];
-        let dx = grid, dy = 0;
-        let food = {x: 320, y: 320};
-        let snakeScore = 0;
-        let gameInterval;
+        function stopAllGameLoops() {
+            clearInterval(snakeInt);
+            cancelAnimationFrame(carAn);
+            cancelAnimationFrame(gravAn);
+            cancelAnimationFrame(defAn);
+            cancelAnimationFrame(stackAn);
+            cancelAnimationFrame(catchAn);
+        }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -grid; }
-            if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = grid; }
-            if (e.key === 'ArrowLeft' && dx === 0) { dx = -grid; dy = 0; }
-            if (e.key === 'ArrowRight' && dx === 0) { dx = grid; dy = 0; }
-        });
+        /* Keyboard listener */
+        let keys = {};
+        window.addEventListener('keydown', e => keys[e.key] = true);
+        window.addEventListener('keyup', e => keys[e.key] = false);
+
+        /* 1. NEON SNAKE */
+        let snakeInt;
+        const sCan = document.getElementById('snakeCanvas');
+        const sCtx = sCan.getContext('2d');
+        let snGrid = 20, sn, snDx, snDy, snFood, snSc;
 
         function runSnake() {
-            gameInterval = setInterval(() => {
-                const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            snakeInt = setInterval(() => {
+                let head = {x: sn[0].x + snDx, y: sn[0].y + snDy};
+                if(head.x<0 || head.x>=sCan.width || head.y<0 || head.y>=sCan.height) return resetSnake();
+                for(let p of sn) if(p.x===head.x && p.y===head.y) return resetSnake();
 
-                // Wall collision
-                if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-                    return resetSnake();
-                }
-
-                // Self collision
-                for (let part of snake) {
-                    if (part.x === head.x && part.y === head.y) return resetSnake();
-                }
-
-                snake.unshift(head);
-
-                // Eat Food
-                if (head.x === food.x && head.y === food.y) {
-                    snakeScore += 10;
-                    document.getElementById('snakeScore').innerText = snakeScore;
-                    food = {
-                        x: Math.floor(Math.random() * (canvas.width / grid)) * grid,
-                        y: Math.floor(Math.random() * (canvas.height / grid)) * grid
+                sn.unshift(head);
+                if(head.x===snFood.x && head.y===snFood.y) {
+                    snSc += 10;
+                    document.getElementById('snakeScore').innerText = snSc;
+                    snFood = {
+                        x: Math.floor(Math.random()*(sCan.width/snGrid))*snGrid,
+                        y: Math.floor(Math.random()*(sCan.height/snGrid))*snGrid
                     };
-                } else {
-                    snake.pop();
-                }
+                } else sn.pop();
 
-                // Draw
-                ctx.fillStyle = '#05060a';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = '#ff007f';
-                ctx.fillRect(food.x, food.y, grid - 2, grid - 2);
-
-                ctx.fillStyle = '#00dfd8';
-                snake.forEach(part => ctx.fillRect(part.x, part.y, grid - 2, grid - 2));
-            }, 100);
+                sCtx.fillStyle = '#05050a'; sCtx.fillRect(0,0,sCan.width,sCan.height);
+                sCtx.fillStyle = '#ff007f'; sCtx.fillRect(snFood.x,snFood.y,snGrid-2,snGrid-2);
+                sCtx.fillStyle = '#00dfd8'; sn.forEach(p => sCtx.fillRect(p.x,p.y,snGrid-2,snGrid-2));
+            }, 90);
         }
-
         function resetSnake() {
-            clearInterval(gameInterval);
-            snake = [{x: 160, y: 160}];
-            dx = grid; dy = 0;
-            snakeScore = 0;
+            clearInterval(snakeInt); sn = [{x:160,y:160}]; snDx=snGrid; snDy=0; snSc=0;
             document.getElementById('snakeScore').innerText = 0;
-            runSnake();
+            snFood = {x: 240, y: 240}; runSnake();
         }
+        document.addEventListener('keydown', e => {
+            if(e.key === 'ArrowUp' && snDy === 0) { snDx=0; snDy=-snGrid; }
+            if(e.key === 'ArrowDown' && snDy === 0) { snDx=0; snDy=snGrid; }
+            if(e.key === 'ArrowLeft' && snDx === 0) { snDx=-snGrid; snDy=0; }
+            if(e.key === 'ArrowRight' && snDx === 0) { snDx=snGrid; snDy=0; }
+        });
 
-        /* --- 2. TIC TAC TOE ENGINE --- */
-        let tttState = Array(9).fill(null);
-        const tttBoard = document.getElementById('tttBoard');
+        /* 2. SYNTHWAVE RIDER (Car game) */
+        let carAn, cCan=document.getElementById('carCanvas'), cCtx=cCan.getContext('2d');
+        let carX, carY, obs, carSc;
 
-        function resetTTT() {
-            tttState = Array(9).fill(null);
-            document.getElementById('tttStatus').innerText = "Your turn (X)";
-            renderTTT();
-        }
+        function updateCar() {
+            if(keys['ArrowLeft'] || keys['a']) carX -= 5;
+            if(keys['ArrowRight'] || keys['d']) carX += 5;
+            if(carX < 10) carX = 10; if(carX > cCan.width-40) carX = cCan.width-40;
 
-        function renderTTT() {
-            tttBoard.innerHTML = '';
-            tttState.forEach((cell, index) => {
-                const div = document.createElement('div');
-                div.className = `ttt-cell ${cell ? cell.toLowerCase() : ''}`;
-                div.innerText = cell || '';
-                div.onclick = () => playerTTTMove(index);
-                tttBoard.appendChild(div);
-            });
-        }
+            carSc += 1;
+            document.getElementById('carScore').innerText = Math.floor(carSc/10);
 
-        function playerTTTMove(i) {
-            if (tttState[i] || checkTTTWinner(tttState)) return;
-            tttState[i] = 'X';
-            renderTTT();
-
-            if (!checkTTTWinner(tttState) && tttState.includes(null)) {
-                document.getElementById('tttStatus').innerText = "AI thinking...";
-                setTimeout(aiTTTMove, 400);
+            if(Math.random() < 0.02) {
+                obs.push({x: Math.random()*(cCan.width-40)+10, y: -40, w: 30, h: 40});
             }
+
+            cCtx.fillStyle = '#05050a'; cCtx.fillRect(0,0,cCan.width,cCan.height);
+
+            // Draw Highway grid
+            cCtx.strokeStyle = 'rgba(0, 223, 216, 0.2)';
+            for(let i=0; i<cCan.width; i+=40) {
+                cCtx.beginPath(); cCtx.moveTo(i, 0); cCtx.lineTo(i, cCan.height); cCtx.stroke();
+            }
+
+            // Draw obstacle
+            cCtx.fillStyle = '#ff007f';
+            for(let o of obs) {
+                o.y += 4;
+                cCtx.fillRect(o.x, o.y, o.w, o.h);
+                if(o.y > cCan.height) obs.shift();
+                // hit collision check
+                if(carX < o.x + o.w && carX + 30 > o.x && carY < o.y + o.h && carY + 40 > o.y) return resetCar();
+            }
+
+            // Player Car
+            cCtx.fillStyle = '#00dfd8'; cCtx.fillRect(carX, carY, 30, 40);
+            if(activeGame==='car') carAn = requestAnimationFrame(updateCar);
+        }
+        function resetCar() {
+            cancelAnimationFrame(carAn); carX = 180; carY = 320; obs = []; carSc = 0;
+            document.getElementById('carScore').innerText = 0; updateCar();
         }
 
-        function aiTTTMove() {
-            let emptyIndices = tttState.map((val, idx) => val === null ? idx : null).filter(val => val !== null);
-            if (emptyIndices.length > 0) {
-                let randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-                tttState[randomIndex] = 'O';
-                renderTTT();
+        /* 3. GRAVITY FLIP */
+        let gravAn, gCan=document.getElementById('gravityCanvas'), gCtx=gCan.getContext('2d');
+        let playerY, pVel, isGravUp, gSpikes, gSc, isOver;
+
+        window.addEventListener('keydown', e => {
+            if(e.key === ' ' || e.key === 'ArrowUp') { isGravUp = !isGravUp; e.preventDefault(); }
+        });
+
+        function updateGravity() {
+            let gravity = isGravUp ? -0.4 : 0.4;
+            pVel += gravity; playerY += pVel;
+
+            if(playerY < 20) { playerY = 20; pVel = 0; }
+            if(playerY > gCan.height-40) { playerY = gCan.height-40; pVel = 0; }
+
+            gSc += 1; document.getElementById('gravityScore').innerText = Math.floor(gSc/10);
+
+            if(Math.random() < 0.015) {
+                let isOnTop = Math.random() > 0.5;
+                gSpikes.push({x: gCan.width, y: isOnTop ? 0 : gCan.height-30, w: 20, h: 30});
+            }
+
+            gCtx.fillStyle='#05050a'; gCtx.fillRect(0,0,gCan.width,gCan.height);
+            gCtx.fillStyle='rgba(121, 40, 202, 0.4)'; gCtx.fillRect(0,0,gCan.width,15); gCtx.fillRect(0,gCan.height-15,gCan.width,15);
+
+            gCtx.fillStyle='#ff007f';
+            for(let s of gSpikes) {
+                s.x -= 4;
+                gCtx.fillRect(s.x, s.y, s.w, s.h);
+                if(s.x + s.w < 0) gSpikes.shift();
+                if(50 < s.x + s.w && 70 > s.x && playerY < s.y + s.h && playerY + 20 > s.y) return resetGravity();
+            }
+
+            gCtx.fillStyle='#00dfd8'; gCtx.fillRect(50, playerY, 20, 20);
+            if(activeGame==='gravity') gravAn = requestAnimationFrame(updateGravity);
+        }
+        function resetGravity() {
+            cancelAnimationFrame(gravAn); playerY=160; pVel=0; isGravUp=false; gSpikes=[]; gSc=0;
+            document.getElementById('gravityScore').innerText = 0; updateGravity();
+        }
+
+        /* 4. ORBIT DEFENDER */
+        let defAn, dCan=document.getElementById('defenderCanvas'), dCtx=dCan.getContext('2d');
+        let defRot, dMeteors, defSc;
+
+        function updateDefender() {
+            if(keys['ArrowLeft'] || keys['a']) defRot -= 0.08;
+            if(keys['ArrowRight'] || keys['d']) defRot += 0.08;
+
+            if(Math.random() < 0.03) {
+                let angle = Math.random() * Math.PI * 2;
+                dMeteors.push({
+                    x: dCan.width/2 + Math.cos(angle)*250,
+                    y: dCan.height/2 + Math.sin(angle)*250,
+                    r: 8,
+                    speed: 1.5 + Math.random()
+                });
+            }
+
+            dCtx.fillStyle='#05050a'; dCtx.fillRect(0,0,dCan.width,dCan.height);
+
+            // Shield Core / Player
+            dCtx.beginPath(); dCtx.arc(dCan.width/2, dCan.height/2, 20, 0, Math.PI*2);
+            dCtx.fillStyle='#00dfd8'; dCtx.fill();
+
+            // Rotating Protector arc
+            dCtx.beginPath(); dCtx.arc(dCan.width/2, dCan.height/2, 40, defRot - 0.5, defRot + 0.5);
+            dCtx.lineWidth=6; dCtx.strokeStyle='#ff007f'; dCtx.stroke();
+
+            for(let i=dMeteors.length-1; i>=0; i--) {
+                let m = dMeteors[i];
+                let dx = dCan.width/2 - m.x, dy = dCan.height/2 - m.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+
+                m.x += (dx/dist) * m.speed; m.y += (dy/dist) * m.speed;
+
+                dCtx.beginPath(); dCtx.arc(m.x, m.y, m.r, 0, Math.PI*2);
+                dCtx.fillStyle='#ffd800'; dCtx.fill();
+
+                // hits barrier shield?
+                if(dist <= 46 && dist >= 32) {
+                    let angleToCore = Math.atan2(m.y - dCan.height/2, m.x - dCan.width/2);
+                    let deltaAngle = Math.abs(angleToCore - defRot);
+                    while(deltaAngle > Math.PI) deltaAngle -= Math.PI*2;
+                    deltaAngle = Math.abs(deltaAngle);
+
+                    if(deltaAngle < 0.5) {
+                        dMeteors.splice(i,1); defSc += 10;
+                        document.getElementById('defenderScore').innerText = defSc;
+                        continue;
+                    }
+                }
+                if(dist < 20) return resetDefender(); // crash
+            }
+            if(activeGame==='defender') defAn = requestAnimationFrame(updateDefender);
+        }
+        function resetDefender() {
+            cancelAnimationFrame(defAn); defRot=0; dMeteors=[]; defSc=0;
+            document.getElementById('defenderScore').innerText=0; updateDefender();
+        }
+
+        /* 5. TOWER STACK */
+        let stackAn, stCan=document.getElementById('stackCanvas'), stCtx=stCan.getContext('2d');
+        let blocks, currBlock, stackSc, stSpeed;
+
+        window.addEventListener('keydown', e => {
+            if(activeGame === 'stack' && e.key === ' ') {
+                dropStackBlock(); e.preventDefault();
+            }
+        });
+        stCan.addEventListener('mousedown', () => { if(activeGame === 'stack') dropStackBlock(); });
+
+        function dropStackBlock() {
+            let lastB = blocks[blocks.length-1];
+            let diff = currBlock.x - lastB.x;
+
+            if(Math.abs(diff) < currBlock.w) {
+                // cut offset w
+                let originalW = currBlock.w;
+                currBlock.w -= Math.abs(diff);
+                if(currBlock.w <= 0) return resetStack();
+
+                currBlock.x = (diff > 0) ? currBlock.x : lastB.x;
+                blocks.push({x: currBlock.x, y: currBlock.y - 25, w: currBlock.w});
+
+                stackSc++; document.getElementById('stackScore').innerText = stackSc;
+                stSpeed = Math.min(6, 2.5 + stackSc*0.1);
                 
-                let winner = checkTTTWinner(tttState);
-                if (winner) {
-                    document.getElementById('tttStatus').innerText = winner === 'Tie' ? "It's a Tie!" : `${winner} Wins!`;
-                } else {
-                    document.getElementById('tttStatus').innerText = "Your turn (X)";
+                currBlock = {x: 0, y: lastB.y - 50, w: currBlock.w, dir: 1};
+            } else return resetStack();
+        }
+
+        function updateStack() {
+            currBlock.x += stSpeed * currBlock.dir;
+            if(currBlock.x < 0 || currBlock.x + currBlock.w > stCan.width) currBlock.dir *= -1;
+
+            stCtx.fillStyle='#05050a'; stCtx.fillRect(0,0,stCan.width,stCan.height);
+
+            // Static blocks stacked below
+            stCtx.fillStyle='#7928ca';
+            let viewOffset = Math.max(0, blocks.length * 25 - 300);
+            for(let b of blocks) {
+                stCtx.fillRect(b.x, b.y + viewOffset, b.w, 23);
+            }
+
+            // Current Sliding Block
+            stCtx.fillStyle='#ff007f';
+            stCtx.fillRect(currBlock.x, currBlock.y + viewOffset, currBlock.w, 23);
+
+            if(activeGame==='stack') stackAn = requestAnimationFrame(updateStack);
+        }
+        function resetStack() {
+            cancelAnimationFrame(stackAn); stackSc=0; stSpeed=2.5;
+            document.getElementById('stackScore').innerText=0;
+            blocks = [{x: 80, y: 380, w: 240}];
+            currBlock = {x: 0, y: 355, w: 240, dir: 1}; updateStack();
+        }
+
+        /* 6. COSMIC CATCH */
+        let catchAn, caCan=document.getElementById('catchCanvas'), caCtx=caCan.getContext('2d');
+        let collectorX, fallingItems, caSc;
+
+        function updateCatch() {
+            if(keys['ArrowLeft'] || keys['a']) collectorX -= 6;
+            if(keys['ArrowRight'] || keys['d']) collectorX += 6;
+
+            if(collectorX < 0) collectorX = 0;
+            if(collectorX > caCan.width - 60) collectorX = caCan.width - 60;
+
+            if(Math.random() < 0.02) {
+                fallingItems.push({x: Math.random()*(caCan.width-20), y: -20, size: 8+Math.random()*6});
+            }
+
+            caCtx.fillStyle='#05050a'; caCtx.fillRect(0,0,caCan.width,caCan.height);
+
+            // Collector
+            caCtx.fillStyle='#ff007f'; caCtx.fillRect(collectorX, caCan.height - 30, 60, 15);
+
+            for(let i=fallingItems.length-1; i>=0; i--) {
+                let item = fallingItems[i];
+                item.y += 3;
+
+                caCtx.beginPath(); caCtx.arc(item.x, item.y, item.size, 0, Math.PI*2);
+                caCtx.fillStyle='#00dfd8'; caCtx.fill();
+
+                if(item.y > caCan.height) { fallingItems.splice(i,1); continue; }
+
+                // caught?
+                if(item.x > collectorX && item.x < collectorX + 60 && item.y >= caCan.height - 35) {
+                    fallingItems.splice(i, 1);
+                    caSc += 5; document.getElementById('catchScore').innerText = caSc;
                 }
             }
+            if(activeGame==='catch') catchAn = requestAnimationFrame(updateCatch);
+        }
+        function resetCatch() {
+            cancelAnimationFrame(catchAn); collectorX=170; fallingItems=[]; caSc=0;
+            document.getElementById('catchScore').innerText=0; updateCatch();
         }
 
-        function checkTTTWinner(board) {
-            const wins = [
-                [0,1,2], [3,4,5], [6,7,8],
-                [0,3,6], [1,4,7], [2,5,8],
-                [0,4,8], [2,4,6]
-            ];
-            for (let [a,b,c] of wins) {
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) return board[a];
-            }
-            return board.includes(null) ? null : 'Tie';
-        }
-
-        /* --- 3. MEMORY MATCH ENGINE --- */
-        const emojis = ['🚀', '🛸', '👾', '🎮', '🚀', '🛸', '👾', '🎮'];
-        let memoryCards = [];
-        let flippedCards = [];
-        let moves = 0;
-
-        function resetMemory() {
-            moves = 0;
-            document.getElementById('memoryMoves').innerText = moves;
-            flippedCards = [];
-            memoryCards = [...emojis].sort(() => 0.5 - Math.random());
-            const board = document.getElementById('memoryBoard');
-            board.innerHTML = '';
-            
-            memoryCards.forEach((emoji, index) => {
-                const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.dataset.emoji = emoji;
-                card.dataset.index = index;
-                card.onclick = () => flipMemoryCard(card);
-                board.appendChild(card);
-            });
-        }
-
-        function flipMemoryCard(card) {
-            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
-                card.classList.add('flipped');
-                card.innerText = card.dataset.emoji;
-                flippedCards.push(card);
-
-                if (flippedCards.length === 2) {
-                    moves++;
-                    document.getElementById('memoryMoves').innerText = moves;
-                    checkMemoryMatch();
-                }
-            }
-        }
-
-        function checkMemoryMatch() {
-            const [c1, c2] = flippedCards;
-            if (c1.dataset.emoji === c2.dataset.emoji) {
-                flippedCards = [];
-            } else {
-                setTimeout(() => {
-                    c1.classList.remove('flipped');
-                    c1.innerText = '';
-                    c2.classList.remove('flipped');
-                    c2.innerText = '';
-                    flippedCards = [];
-                }, 800);
-            }
-        }
-
-        // Initialize First Game
-        runSnake();
-        resetTTT();
-        resetMemory();
+        // Init Launch!
+        resetSnake();
     </script>
 </body>
 </html>
