@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free AI Photo Studio & Generator</title>
+    <title>Realistic AI Photo Studio</title>
     <style>
         * {
             box-sizing: border-box;
@@ -59,7 +59,7 @@
             font-size: 0.9rem;
             color: #cbd5e1;
         }
-        textarea {
+        textarea, select {
             width: 100%;
             padding: 12px;
             border-radius: 8px;
@@ -68,8 +68,10 @@
             color: #fff;
             font-size: 0.95rem;
             outline: none;
+        }
+        textarea {
             resize: vertical;
-            min-height: 120px;
+            min-height: 100px;
         }
         input[type="file"] {
             display: none;
@@ -103,7 +105,7 @@
         }
         .preview-box {
             width: 100%;
-            height: 250px;
+            height: 260px;
             background: #0f172a;
             border-radius: 8px;
             border: 1px solid #334155;
@@ -137,8 +139,8 @@
 <body>
 
     <header>
-        <h1>Free AI Photo Studio</h1>
-        <p>কোনো Key ছাড়াই ফ্রীতে AI দিয়ে নতুন ছবি তৈরি করুন</p>
+        <h1>AI Realistic Photo Studio</h1>
+        <p>বাস্তবসম্মত প্রফেশনাল AI ছবি তৈরি করুন</p>
     </header>
 
     <div class="container">
@@ -151,8 +153,17 @@
             </div>
 
             <div class="form-group">
-                <label for="prompt">কেমন ছবি চান? (English Prompt):</label>
-                <textarea id="prompt" placeholder="Example: A futuristic cyberpunk Bangladeshi man portrait, highly detailed, 8k resolution..."></textarea>
+                <label>ছবি স্টাইল (Style):</label>
+                <select id="styleSelect">
+                    <option value="photorealistic portrait, DSLR camera shot, 85mm lens, natural lighting, sharp focus, highly detailed skin texture, real life photography">📸 প্রফেশনাল রিয়েলিস্টিক ছবি (DSLR Look)</option>
+                    <option value="cinematic photography, soft natural daylight, shallow depth of field, masterpiece portrait">🎬 সিনেমাটিক পোর্ট্রেট (Cinematic)</option>
+                    <option value="cyberpunk style, neon lights, futuristic fashion">🌆 সাইবারপাঙ্ক (Cyberpunk)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="prompt">অতিরিক্ত তথ্য (English Prompt):</label>
+                <textarea id="prompt" placeholder="Example: A young Bangladeshi man in a blue blazer, outdoor university campus background..."></textarea>
             </div>
 
             <button class="btn-submit" onclick="generateAIImage()">✨ AI ছবি জেনারেট করুন</button>
@@ -193,6 +204,7 @@
         }
 
         function generateAIImage() {
+            const style = document.getElementById('styleSelect').value;
             const promptText = document.getElementById('prompt').value.trim();
             const resultImg = document.getElementById('resultImage');
             const resultPlaceholder = document.getElementById('resultPlaceholder');
@@ -203,14 +215,15 @@
                 return;
             }
 
+            const fullPrompt = `${promptText}, ${style}`;
+
             resultPlaceholder.style.display = 'block';
-            resultPlaceholder.innerText = "AI ছবি তৈরি হচ্ছে, অনুগ্রহ করে ১০-১৫ সেকেন্ড অপেক্ষা করুন...";
+            resultPlaceholder.innerText = "রিয়েলিস্টিক AI ছবি তৈরি হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...";
             resultImg.style.display = 'none';
             downloadBtn.style.display = 'none';
 
-            // Free AI Generation URL
             const seed = Math.floor(Math.random() * 100000);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?seed=${seed}&width=1024&height=1024&nologo=true`;
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?seed=${seed}&width=1024&height=1024&nologo=true&model=flux`;
 
             const tempImg = new Image();
             tempImg.onload = function() {
