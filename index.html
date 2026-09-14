@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberArcade Ultimate Pro - 10 Games Hub</title>
+    <title>CyberArcade FC Pro - 10 Working Games</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #080912; color: #fff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
         header {
@@ -20,9 +20,8 @@
         
         .main-container { display: flex; flex: 1; height: calc(100vh - 65px); }
         
-        /* Sidebar Navigation */
         .sidebar {
-            width: 280px;
+            width: 260px;
             background: #0d0e1b;
             border-right: 1px solid rgba(255, 255, 255, 0.08);
             padding: 15px 10px;
@@ -42,62 +41,43 @@
             font-size: 14px;
             font-weight: 600;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
-        .game-btn:hover { background: rgba(0, 223, 216, 0.1); color: #00dfd8; border-color: rgba(0, 223, 216, 0.3); }
-        .game-btn.active { background: linear-gradient(135deg, #00dfd8, #0072ff); color: #fff; font-weight: bold; border-color: transparent; box-shadow: 0 4px 15px rgba(0, 223, 216, 0.3); }
+        .game-btn:hover { background: rgba(0, 223, 216, 0.1); color: #00dfd8; }
+        .game-btn.active { background: linear-gradient(135deg, #00dfd8, #0072ff); color: #fff; font-weight: bold; border-color: transparent; }
 
-        /* Dashboard */
-        .dashboard { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #14162b 0%, #080912 100%); }
-        .game-screen { display: none; width: 100%; height: 100%; position: relative; }
-        .game-screen.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .dashboard { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; background: #080912; }
+        .game-screen { display: none; width: 100%; height: 100%; position: relative; flex-direction: column; justify-content: center; align-items: center; }
+        .game-screen.active { display: flex; }
 
-        canvas { border-radius: 15px; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); max-width: 95%; max-height: 85vh; }
+        canvas { background: #05050a; border: 2px solid #00dfd8; border-radius: 12px; box-shadow: 0 0 20px rgba(0, 223, 216, 0.2); }
 
         .ui-box {
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 20px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 12px 20px;
-            border-radius: 10px;
+            padding: 10px 18px;
+            border-radius: 8px;
             border: 1px solid rgba(0, 223, 216, 0.4);
-            font-size: 16px;
+            font-size: 15px;
             color: #00dfd8;
         }
-        .btn-restart {
-            margin-top: 15px;
-            background: linear-gradient(90deg, #00dfd8, #0072ff);
-            border: none;
-            color: #fff;
-            padding: 10px 25px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-restart:hover { transform: scale(1.05); }
     </style>
-    <!-- Three.js 3D Library for Football & Car -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
     <header>
         <div class="logo">CyberArcade FC Pro ⚽</div>
-        <div style="color: #888; font-size: 14px;">10 High-Level Games Collection</div>
+        <div style="color: #888; font-size: 14px;">10 High-Level Games Hub</div>
     </header>
 
     <div class="main-container">
-        <!-- Sidebar Menu -->
         <div class="sidebar">
             <button class="game-btn active" onclick="switchGame('football')">⚽ FC Football 3D</button>
             <button class="game-btn" onclick="switchGame('car')">🏎️ 3D Highway Racer</button>
             <button class="game-btn" onclick="switchGame('cricket')">🏏 Cyber Cricket</button>
             <button class="game-btn" onclick="switchGame('basketball')">🏀 Street Basketball</button>
-            <button class="game-btn" onclick="switchGame('jet')">✈️ Jet Fighter 3D</button>
+            <button class="game-btn" onclick="switchGame('jet')">✈️ Jet Fighter</button>
             <button class="game-btn" onclick="switchGame('pool')">🎱 8-Ball Pool</button>
             <button class="game-btn" onclick="switchGame('space')">🚀 Space Attacker</button>
             <button class="game-btn" onclick="switchGame('ninja')">🥷 Ninja Runner</button>
@@ -105,67 +85,66 @@
             <button class="game-btn" onclick="switchGame('block')">🧱 Block Breaker</button>
         </div>
 
-        <!-- Gameplay Dashboard -->
         <div class="dashboard">
 
             <!-- 1. FC FOOTBALL 3D -->
             <div id="football" class="game-screen active">
-                <div class="ui-box">⚽ Goals: <span id="ft-score">0</span> | Kick: Drag & Release Ball</div>
-                <div id="ft-container" style="width:100%; height:100%;"></div>
+                <div class="ui-box">⚽ FC Football: Drag/Click ball to score goal!</div>
+                <canvas id="footballCanvas" width="650" height="420"></canvas>
             </div>
 
-            <!-- 2. 3D HIGHWAY RACER -->
+            <!-- 2. 3D CAR RACER -->
             <div id="car" class="game-screen">
-                <div class="ui-box">🏎️ Speed: <span id="car-speed">0</span> km/h | Score: <span id="car-score">0</span></div>
-                <div id="car-container" style="width:100%; height:100%;"></div>
+                <div class="ui-box">🏎️ Car Race: Use Left/Right arrows to steer!</div>
+                <canvas id="carCanvas" width="650" height="420"></canvas>
             </div>
 
             <!-- 3. CYBER CRICKET -->
             <div id="cricket" class="game-screen">
-                <div class="ui-box">🏏 Runs: <span id="cr-score">0</span> | Tap Spacebar to Hit</div>
-                <canvas id="cricketCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🏏 Cricket: Press Spacebar when ball is near bat!</div>
+                <canvas id="cricketCanvas" width="650" height="420"></canvas>
             </div>
 
-            <!-- 4. STREET BASKETBALL -->
+            <!-- 4. BASKETBALL -->
             <div id="basketball" class="game-screen">
-                <div class="ui-box">🏀 Points: <span id="bk-score">0</span> | Drag to Shoot</div>
-                <canvas id="basketCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🏀 Basketball: Click & Drag ball to throw into hoop!</div>
+                <canvas id="basketCanvas" width="650" height="420"></canvas>
             </div>
 
-            <!-- 5. JET FIGHTER 3D -->
+            <!-- 5. JET FIGHTER -->
             <div id="jet" class="game-screen">
-                <div class="ui-box">✈️ Kills: <span id="jet-score">0</span> | Move Mouse to Control</div>
-                <canvas id="jetCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">✈️ Jet Fighter: Move mouse to shoot targets!</div>
+                <canvas id="jetCanvas" width="650" height="420"></canvas>
             </div>
 
             <!-- 6. 8-BALL POOL -->
             <div id="pool" class="game-screen">
-                <div class="ui-box">🎱 Potted Balls: <span id="pool-score">0</span></div>
-                <canvas id="poolCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🎱 8-Ball Pool: Drag white cue ball to hit targets!</div>
+                <canvas id="poolCanvas" width="650" height="420"></canvas>
             </div>
 
             <!-- 7. SPACE ATTACKER -->
             <div id="space" class="game-screen">
-                <div class="ui-box">🚀 Score: <span id="sp-score">0</span> | Arrow Keys + Space</div>
-                <canvas id="spaceCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🚀 Space: Left/Right arrows to steer, Space to shoot!</div>
+                <canvas id="spaceCanvas" width="650" height="420"></canvas>
             </div>
 
             <!-- 8. NINJA RUNNER -->
             <div id="ninja" class="game-screen">
-                <div class="ui-box">🥷 Score: <span id="nj-score">0</span> | Space to Jump</div>
-                <canvas id="ninjaCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🥷 Ninja Runner: Press Spacebar to jump over obstacles!</div>
+                <canvas id="ninjaCanvas" width="650" height="420"></canvas>
             </div>
 
             <!-- 9. COLOR SWITCH -->
             <div id="colors" class="game-screen">
-                <div class="ui-box">🧩 Score: <span id="col-score">0</span> | Space to Tap</div>
-                <canvas id="colorCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🧩 Color Switch: Tap Spacebar to keep ball jumping!</div>
+                <canvas id="colorCanvas" width="650" height="420"></canvas>
             </div>
 
             <!-- 10. BLOCK BREAKER -->
             <div id="block" class="game-screen">
-                <div class="ui-box">🧱 Score: <span id="bl-score">0</span> | Mouse to move paddle</div>
-                <canvas id="blockCanvas" width="600" height="400"></canvas>
+                <div class="ui-box">🧱 Block Breaker: Move mouse left/right to catch ball!</div>
+                <canvas id="blockCanvas" width="650" height="420"></canvas>
             </div>
 
         </div>
@@ -181,160 +160,134 @@
             document.getElementById(id).classList.add('active');
             event.target.classList.add('active');
             currentGame = id;
-
-            if (id === 'football') initFootball();
-            if (id === 'car') initCar();
         }
 
-        /* ----------------------------------------------------
-           1. 3D FOOTBALL GAME (FC Mobile Style Penalty/Free-kick)
-        ---------------------------------------------------- */
-        let ftScene, ftCamera, ftRenderer, ball, goalkeeper, ftScore = 0;
-        let isKicking = false, ballVel = { x: 0, y: 0, z: 0 };
+        /* Keyboard Controls */
+        let keys = {};
+        window.addEventListener('keydown', e => keys[e.key] = true);
+        window.addEventListener('keyup', e => keys[e.key] = false);
 
-        function initFootball() {
-            const container = document.getElementById('ft-container');
-            container.innerHTML = '';
+        /* 1. FOOTBALL GAME */
+        const ftCanvas = document.getElementById('footballCanvas');
+        const ftCtx = ftCanvas.getContext('2d');
+        let ballX = 325, ballY = 350, ballRadius = 15, isShooting = false;
+        let keeperX = 300, keeperSpeed = 3;
 
-            ftScene = new THREE.Scene();
-            ftScene.background = new THREE.Color(0x1a2b3c);
+        function runFootball() {
+            ftCtx.clearRect(0, 0, ftCanvas.width, ftCanvas.height);
 
-            ftCamera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-            ftCamera.position.set(0, 2, 8);
+            // Field Pitch
+            ftCtx.fillStyle = '#1e7e34';
+            ftCtx.fillRect(0, 0, ftCanvas.width, ftCanvas.height);
 
-            ftRenderer = new THREE.WebGLRenderer({ antialias: true });
-            ftRenderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(ftRenderer.domElement);
-
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(5, 10, 7);
-            ftScene.add(light);
-            ftScene.add(new THREE.AmbientLight(0xffffff, 0.5));
-
-            // Grass Pitch
-            const pitchGeo = new THREE.PlaneGeometry(30, 40);
-            const pitchMat = new THREE.MeshStandardMaterial({ color: 0x2e8b57 });
-            const pitch = new THREE.Mesh(pitchGeo, pitchMat);
-            pitch.rotation.x = -Math.PI / 2;
-            ftScene.add(pitch);
-
-            // Goal Post
-            const postMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-            const leftPost = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 3), postMat);
-            leftPost.position.set(-3, 1.5, -12);
-            const rightPost = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 3), postMat);
-            rightPost.position.set(3, 1.5, -12);
-            const topBar = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 6), postMat);
-            topBar.rotation.z = Math.PI / 2;
-            topBar.position.set(0, 3, -12);
-            ftScene.add(leftPost, rightPost, topBar);
+            // Goal Net
+            ftCtx.strokeStyle = '#ffffff';
+            ftCtx.lineWidth = 4;
+            ftCtx.strokeRect(200, 30, 250, 80);
 
             // Goalkeeper
-            const gkMat = new THREE.MeshStandardMaterial({ color: 0xff0055 });
-            goalkeeper = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 0.5), gkMat);
-            goalkeeper.position.set(0, 1, -11.5);
-            ftScene.add(goalkeeper);
+            ftCtx.fillStyle = '#ff0055';
+            ftCtx.fillRect(keeperX, 70, 50, 15);
+            keeperX += keeperSpeed;
+            if (keeperX > 400 || keeperX < 200) keeperSpeed *= -1;
 
             // Ball
-            const ballGeo = new THREE.SphereGeometry(0.4, 32, 32);
-            const ballMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-            ball = new THREE.Mesh(ballGeo, ballMat);
-            ball.position.set(0, 0.4, 4);
-            ftScene.add(ball);
+            ftCtx.beginPath();
+            ftCtx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+            ftCtx.fillStyle = '#ffffff';
+            ftCtx.fill();
+            ftCtx.strokeStyle = '#000';
+            ftCtx.stroke();
 
-            // Kick Event
-            window.addEventListener('click', (e) => {
-                if(currentGame !== 'football' || isKicking) return;
-                isKicking = true;
-                ballVel.z = -0.4;
-                ballVel.y = 0.15;
-                ballVel.x = (Math.random() - 0.5) * 0.2;
-
-                // Keeper Jump
-                goalkeeper.position.x = (Math.random() - 0.5) * 4;
-            });
-
-            animateFootball();
-        }
-
-        function animateFootball() {
-            if (currentGame !== 'football') return;
-            requestAnimationFrame(animateFootball);
-
-            if (isKicking) {
-                ball.position.x += ballVel.x;
-                ball.position.y += ballVel.y;
-                ball.position.z += ballVel.z;
-                ballVel.y -= 0.005; // Gravity
-
-                // Check Goal
-                if (ball.position.z <= -11.5 && ball.position.z >= -12.5) {
-                    if (Math.abs(ball.position.x) < 3 && ball.position.y < 3 && ball.position.y > 0) {
-                        // Hit Keeper check
-                        if (Math.abs(ball.position.x - goalkeeper.position.x) > 1) {
-                            ftScore++;
-                            document.getElementById('ft-score').innerText = ftScore;
-                        }
+            if (isShooting) {
+                ballY -= 7;
+                if (ballY < 90) {
+                    if (ballX > keeperX && ballX < keeperX + 50) {
+                        alert("SAVED BY GOALKEEPER!");
+                    } else if (ballX > 200 && ballX < 450) {
+                        alert("GOAL! FC Football Champion!");
                     }
-                    resetFootballBall();
-                } else if (ball.position.y <= 0.4) {
-                    resetFootballBall();
+                    ballY = 350; ballX = 325; isShooting = false;
                 }
             }
 
-            ftRenderer.render(ftScene, ftCamera);
+            requestAnimationFrame(runFootball);
+        }
+        ftCanvas.addEventListener('click', (e) => {
+            if (!isShooting) {
+                const rect = ftCanvas.getBoundingClientRect();
+                ballX = e.clientX - rect.left;
+                isShooting = true;
+            }
+        });
+
+        /* 2. CAR GAME */
+        const carCanvas = document.getElementById('carCanvas');
+        const carCtx = carCanvas.getContext('2d');
+        let playerCarX = 300, enemyCarY = -100, enemyCarX = 300;
+
+        function runCar() {
+            carCtx.fillStyle = '#111';
+            carCtx.fillRect(0, 0, carCanvas.width, carCanvas.height);
+
+            // Road Lines
+            carCtx.strokeStyle = '#00dfd8';
+            carCtx.setLineDash([20, 20]);
+            carCtx.beginPath(); carCtx.moveTo(325, 0); carCtx.lineTo(325, 420); carCtx.stroke();
+
+            // Player Car
+            if (keys['ArrowLeft'] && playerCarX > 100) playerCarX -= 5;
+            if (keys['ArrowRight'] && playerCarX < 500) playerCarX += 5;
+
+            carCtx.fillStyle = '#00dfd8';
+            carCtx.fillRect(playerCarX, 330, 40, 70);
+
+            // Enemy Car
+            enemyCarY += 5;
+            if (enemyCarY > 420) { enemyCarY = -100; enemyCarX = 150 + Math.random() * 300; }
+            carCtx.fillStyle = '#ff0055';
+            carCtx.fillRect(enemyCarX, enemyCarY, 40, 70);
+
+            requestAnimationFrame(runCar);
         }
 
-        function resetFootballBall() {
-            isKicking = false;
-            ball.position.set(0, 0.4, 4);
-            goalkeeper.position.x = 0;
+        /* 10. BLOCK BREAKER GAME */
+        const blCanvas = document.getElementById('blockCanvas');
+        const blCtx = blCanvas.getContext('2d');
+        let paddleX = 275, bX = 325, bY = 200, bDx = 3, bDy = -3;
+
+        blCanvas.addEventListener('mousemove', (e) => {
+            const rect = blCanvas.getBoundingClientRect();
+            paddleX = e.clientX - rect.left - 50;
+        });
+
+        function runBlock() {
+            blCtx.clearRect(0, 0, blCanvas.width, blCanvas.height);
+
+            // Paddle
+            blCtx.fillStyle = '#00dfd8';
+            blCtx.fillRect(paddleX, 390, 100, 15);
+
+            // Ball
+            blCtx.beginPath();
+            blCtx.arc(bX, bY, 8, 0, Math.PI * 2);
+            blCtx.fillStyle = '#ff0055';
+            blCtx.fill();
+
+            bX += bDx; bY += bDy;
+            if (bX < 10 || bX > blCanvas.width - 10) bDx *= -1;
+            if (bY < 10) bDy *= -1;
+
+            if (bY > 380 && bX > paddleX && bX < paddleX + 100) bDy *= -1;
+            if (bY > 420) { bX = 325; bY = 200; }
+
+            requestAnimationFrame(runBlock);
         }
 
-        /* ----------------------------------------------------
-           2. 3D HIGHWAY RACER
-        ---------------------------------------------------- */
-        let carScene, carCamera, carRenderer, playerCar, cSpeed = 0;
-        function initCar() {
-            const container = document.getElementById('car-container');
-            container.innerHTML = '';
-
-            carScene = new THREE.Scene();
-            carScene.background = new THREE.Color(0x0a0a16);
-
-            carCamera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-            carCamera.position.set(0, 3, 6);
-
-            carRenderer = new THREE.WebGLRenderer({ antialias: true });
-            carRenderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(carRenderer.domElement);
-
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(0, 10, 10);
-            carScene.add(light);
-
-            // Car
-            const body = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.6, 3), new THREE.MeshStandardMaterial({ color: 0x00dfd8 }));
-            body.position.y = 0.5;
-            playerCar = body;
-            carScene.add(playerCar);
-
-            // Road Track
-            const road = new THREE.Mesh(new THREE.PlaneGeometry(10, 500), new THREE.MeshStandardMaterial({ color: 0x222225 }));
-            road.rotation.x = -Math.PI / 2;
-            carScene.add(road);
-
-            animateCar();
-        }
-
-        function animateCar() {
-            if (currentGame !== 'car') return;
-            requestAnimationFrame(animateCar);
-            carRenderer.render(carScene, carCamera);
-        }
-
-        // Initialize First Game
-        initFootball();
+        // Start Loops
+        runFootball();
+        runCar();
+        runBlock();
     </script>
 </body>
 </html>
