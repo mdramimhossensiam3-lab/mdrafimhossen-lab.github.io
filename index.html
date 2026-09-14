@@ -3,549 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberArcade Pro - High Level Gaming Hub</title>
+    <title>3D Highway Car Racer</title>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #08090f;
+            overflow: hidden;
+            background: #000;
             color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
         }
-        header {
-            background: rgba(13, 14, 25, 0.85);
-            backdrop-filter: blur(15px);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: block;
         }
-        .logo {
-            font-size: 26px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff007f, #7928ca, #00dfd8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
-        }
-        .main-layout {
-            display: flex;
-            flex: 1;
-            height: calc(100vh - 70px);
-        }
-        /* Sidebar Menu */
-        .sidebar {
-            width: 280px;
-            background: #0d0e19;
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 20px 10px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .menu-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: #8c90b0;
-            padding: 12px 18px;
+        .ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
             border-radius: 12px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            backdrop-filter: blur(5px);
         }
-        .menu-btn:hover {
-            background: rgba(255, 0, 127, 0.05);
-            color: #ff007f;
-            border-color: rgba(255, 0, 127, 0.2);
-        }
-        .menu-btn.active {
-            background: linear-gradient(135deg, #7928ca, #ff007f);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.3);
-        }
-        /* Game Dashboard Screen */
-        .dashboard {
-            flex: 1;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at center, #141525 0%, #08090f 100%);
-            overflow-y: auto;
-        }
-        .game-panel {
-            display: none;
-            width: 100%;
-            max-width: 600px;
-            background: rgba(20, 21, 37, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            text-align: center;
-        }
-        .game-panel.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .game-title {
-            font-size: 26px;
-            color: #00dfd8;
+        .ui-overlay h1 {
+            font-size: 20px;
+            color: #00ffcc;
             margin-bottom: 5px;
-            text-shadow: 0 0 8px rgba(0, 223, 216, 0.3);
         }
-        .game-desc {
-            font-size: 13px;
-            color: #8c90b0;
-            margin-bottom: 15px;
+        .ui-overlay p {
+            font-size: 16px;
+            color: #fff;
         }
-        .score-display {
+        .controls-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            background: rgba(15, 15, 25, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid #ff0055;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5);
+        }
+        #game-over h2 {
+            font-size: 36px;
+            color: #ff0055;
+            margin-bottom: 10px;
+        }
+        #game-over p {
             font-size: 18px;
-            margin-bottom: 15px;
-            color: #ff007f;
-            font-weight: bold;
-        }
-        canvas {
-            background: #05050a;
-            border: 2px solid #7928ca;
-            border-radius: 12px;
-            box-shadow: 0 0 25px rgba(121, 40, 202, 0.2);
-            max-width: 100%;
+            margin-bottom: 20px;
         }
         .btn-restart {
-            margin-top: 15px;
-            background: linear-gradient(90deg, #ff007f, #00dfd8);
+            background: linear-gradient(45deg, #ff0055, #00ffcc);
             border: none;
-            color: #fff;
-            padding: 10px 25px;
-            border-radius: 30px;
+            color: #000;
+            padding: 12px 30px;
+            font-size: 16px;
             font-weight: bold;
+            border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: 0.3s;
         }
         .btn-restart:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+            box-shadow: 0 0 15px #00ffcc;
         }
     </style>
+    <!-- Three.js 3D Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <header>
-        <div class="logo">CyberArcade 🎮</div>
-        <div style="font-size: 14px; color: #8c90b0;">High Level Original Gaming Core</div>
-    </header>
-
-    <div class="main-layout">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <button class="menu-btn active" onclick="switchGame('snake')">🐍 Neon Snake</button>
-            <button class="menu-btn" onclick="switchGame('car')">🏎️ Synthwave Rider (Car)</button>
-            <button class="menu-btn" onclick="switchGame('gravity')">🌌 Gravity Flip</button>
-            <button class="menu-btn" onclick="switchGame('defender')">🛡️ Orbit Defender</button>
-            <button class="menu-btn" onclick="switchGame('stack')">🏗️ Tower Stack</button>
-            <button class="menu-btn" onclick="switchGame('catch')">🌠 Cosmic Catch</button>
-        </div>
-
-        <!-- Gameplay Dashboard -->
-        <div class="dashboard">
-
-            <!-- 1. NEON SNAKE -->
-            <div id="snake" class="game-panel active">
-                <h2 class="game-title">Neon Snake</h2>
-                <div class="game-desc">Avoid barriers, grab Neon pills. Arrow keys to steer.</div>
-                <div class="score-display">Score: <span id="snakeScore">0</span></div>
-                <canvas id="snakeCanvas" width="400" height="400"></canvas>
-                <button class="btn-restart" onclick="resetSnake()">Restart Mission</button>
-            </div>
-
-            <!-- 2. SYNTHWAVE RIDER (Car game) -->
-            <div id="car" class="game-panel">
-                <h2 class="game-title">Synthwave Rider (Car)</h2>
-                <div class="game-desc">Use A/D or Left/Right arrows to move. Avoid oncoming barricades.</div>
-                <div class="score-display">Distance: <span id="carScore">0</span> km</div>
-                <canvas id="carCanvas" width="400" height="400"></canvas>
-                <button class="btn-restart" onclick="resetCar()">Jump Back in Car</button>
-            </div>
-
-            <!-- 3. GRAVITY FLIP -->
-            <div id="gravity" class="game-panel">
-                <h2 class="game-title">Gravity Flip</h2>
-                <div class="game-desc">Spacebar or Tap to flip Gravity! Avoid upper & lower spikes.</div>
-                <div class="score-display">Distance: <span id="gravityScore">0</span></div>
-                <canvas id="gravityCanvas" width="400" height="350"></canvas>
-                <button class="btn-restart" onclick="resetGravity()">Play Again</button>
-            </div>
-
-            <!-- 4. ORBIT DEFENDER -->
-            <div id="defender" class="game-panel">
-                <h2 class="game-title">Orbit Defender</h2>
-                <div class="game-desc">Rotate your barrier with Arrow Keys to blast falling meteors.</div>
-                <div class="score-display">Kills: <span id="defenderScore">0</span></div>
-                <canvas id="defenderCanvas" width="400" height="400"></canvas>
-                <button class="btn-restart" onclick="resetDefender()">Restart Shield</button>
-            </div>
-
-            <!-- 5. TOWER STACK -->
-            <div id="stack" class="game-panel">
-                <h2 class="game-title">Tower Stack</h2>
-                <div class="game-desc">Space / Click to drop sliding blocks. Perfectly stack them high!</div>
-                <div class="score-display">Blocks: <span id="stackScore">0</span></div>
-                <canvas id="stackCanvas" width="400" height="420"></canvas>
-                <button class="btn-restart" onclick="resetStack()">Rebuild Tower</button>
-            </div>
-
-            <!-- 6. COSMIC CATCH -->
-            <div id="catch" class="game-panel">
-                <h2 class="game-title">Cosmic Catch</h2>
-                <div class="game-desc">Use A/D or Arrows to steer collector box and catch cosmic balls.</div>
-                <div class="score-display">Energy Caught: <span id="catchScore">0</span></div>
-                <canvas id="catchCanvas" width="400" height="400"></canvas>
-                <button class="btn-restart" onclick="resetCatch()">Relaunch</button>
-            </div>
-
-        </div>
+    <div class="ui-overlay">
+        <h1>3D Highway Racer</h1>
+        <p>Speed: <span id="speed-val" style="color:#00ffcc; font-weight:bold;">0</span> km/h</p>
+        <p>Score: <span id="score-val" style="color:#ff0055; font-weight:bold;">0</span></p>
     </div>
 
+    <div class="controls-hint">
+        🎮 <b>Controls:</b> Left / Right Arrows (Steer), Up Arrow (Accelerate), Down Arrow (Brake)
+    </div>
+
+    <div id="game-over">
+        <h2>CRASHED!</h2>
+        <p>Your Final Score: <span id="final-score">0</span></p>
+        <button class="btn-restart" onclick="resetGame()">Play Again</button>
+    </div>
+
+    <div id="game-container"></div>
+
     <script>
-        // Global switch
-        let activeGame = 'snake';
-        function switchGame(gameId) {
-            document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+        let scene, camera, renderer;
+        let playerCar, road, enemyCars = [];
+        let speed = 0, maxSpeed = 1.5, acceleration = 0.015, deceleration = 0.01;
+        let score = 0, isGameOver = false;
+
+        let keys = { ArrowLeft: false, ArrowRight: false, ArrowUp: false, ArrowDown: false };
+
+        function init() {
+            const container = document.getElementById('game-container');
+
+            // 1. Scene & Camera
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0b0d19);
+            scene.fog = new THREE.FogExp2(0x0b0d19, 0.015);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 3, 7);
+            camera.lookAt(0, 1, -5);
+
+            // 2. Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // 3. Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            scene.add(dirLight);
+
+            // 4. Create Road
+            const roadGeo = new THREE.PlaneGeometry(12, 1000);
+            const roadMat = new THREE.MeshStandardMaterial({ color: 0x222225, roughness: 0.8 });
+            road = new THREE.Mesh(roadGeo, roadMat);
+            road.rotation.x = -Math.PI / 2;
+            road.position.z = -450;
+            scene.add(road);
+
+            // Road Lines
+            for (let i = 0; i < 50; i++) {
+                const lineGeo = new THREE.PlaneGeometry(0.3, 4);
+                const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                const line = new THREE.Mesh(lineGeo, lineMat);
+                line.rotation.x = -Math.PI / 2;
+                line.position.set(0, 0.01, -i * 20);
+                scene.add(line);
+            }
+
+            // 5. Create Player Car
+            playerCar = createCar(0x00ffcc);
+            playerCar.position.set(0, 0, 0);
+            scene.add(playerCar);
+
+            // 6. Spawn Initial Enemy Cars
+            for (let i = 0; i < 5; i++) {
+                spawnEnemyCar(-50 - i * 40);
+            }
+
+            // Event Listeners
+            window.addEventListener('keydown', e => { if (keys.hasOwnProperty(e.key)) keys[e.key] = true; });
+            window.addEventListener('keyup', e => { if (keys.hasOwnProperty(e.key)) keys[e.key] = false; });
+            window.addEventListener('resize', onWindowResize);
+
+            animate();
+        }
+
+        // Car Mesh Generator
+        function createCar(colorHex) {
+            const carGroup = new THREE.Group();
+
+            // Car Body
+            const bodyGeo = new THREE.BoxGeometry(1.6, 0.7, 3.2);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: colorHex, metalness: 0.5, roughness: 0.2 });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 0.5;
+            carGroup.add(body);
+
+            // Cabin / Roof
+            const cabinGeo = new THREE.BoxGeometry(1.2, 0.5, 1.6);
+            const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.1 });
+            const cabin = new THREE.Mesh(cabinGeo, cabinMat);
+            cabin.position.set(0, 1.0, -0.2);
+            carGroup.add(cabin);
+
+            // Headlights
+            const lightGeo = new THREE.BoxGeometry(0.3, 0.15, 0.1);
+            const lightMat = new THREE.MeshBasicMaterial({ color: 0xffffaa });
+            const leftLight = new THREE.Mesh(lightGeo, lightMat);
+            leftLight.position.set(-0.6, 0.5, -1.61);
+            const rightLight = new THREE.Mesh(lightGeo, lightMat);
+            rightLight.position.set(0.6, 0.5, -1.61);
+            carGroup.add(leftLight);
+            carGroup.add(rightLight);
+
+            return carGroup;
+        }
+
+        function spawnEnemyCar(zPos) {
+            const colors = [0xff0055, 0xffaa00, 0x9900ff, 0x0099ff];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const enemy = createCar(randomColor);
             
-            document.getElementById(gameId).classList.add('active');
-            event.target.classList.add('active');
-            activeGame = gameId;
-
-            stopAllGameLoops();
-            if (gameId === 'snake') resetSnake();
-            if (gameId === 'car') resetCar();
-            if (gameId === 'gravity') resetGravity();
-            if (gameId === 'defender') resetDefender();
-            if (gameId === 'stack') resetStack();
-            if (gameId === 'catch') resetCatch();
+            const lanes = [-3.8, -1.3, 1.3, 3.8];
+            const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
+            
+            enemy.position.set(randomLane, 0, zPos);
+            scene.add(enemy);
+            enemyCars.push(enemy);
         }
 
-        function stopAllGameLoops() {
-            clearInterval(snakeInt);
-            cancelAnimationFrame(carAn);
-            cancelAnimationFrame(gravAn);
-            cancelAnimationFrame(defAn);
-            cancelAnimationFrame(stackAn);
-            cancelAnimationFrame(catchAn);
-        }
+        function animate() {
+            if (isGameOver) return;
 
-        /* Keyboard listener */
-        let keys = {};
-        window.addEventListener('keydown', e => keys[e.key] = true);
-        window.addEventListener('keyup', e => keys[e.key] = false);
+            requestAnimationFrame(animate);
 
-        /* 1. NEON SNAKE */
-        let snakeInt;
-        const sCan = document.getElementById('snakeCanvas');
-        const sCtx = sCan.getContext('2d');
-        let snGrid = 20, sn, snDx, snDy, snFood, snSc;
-
-        function runSnake() {
-            snakeInt = setInterval(() => {
-                let head = {x: sn[0].x + snDx, y: sn[0].y + snDy};
-                if(head.x<0 || head.x>=sCan.width || head.y<0 || head.y>=sCan.height) return resetSnake();
-                for(let p of sn) if(p.x===head.x && p.y===head.y) return resetSnake();
-
-                sn.unshift(head);
-                if(head.x===snFood.x && head.y===snFood.y) {
-                    snSc += 10;
-                    document.getElementById('snakeScore').innerText = snSc;
-                    snFood = {
-                        x: Math.floor(Math.random()*(sCan.width/snGrid))*snGrid,
-                        y: Math.floor(Math.random()*(sCan.height/snGrid))*snGrid
-                    };
-                } else sn.pop();
-
-                sCtx.fillStyle = '#05050a'; sCtx.fillRect(0,0,sCan.width,sCan.height);
-                sCtx.fillStyle = '#ff007f'; sCtx.fillRect(snFood.x,snFood.y,snGrid-2,snGrid-2);
-                sCtx.fillStyle = '#00dfd8'; sn.forEach(p => sCtx.fillRect(p.x,p.y,snGrid-2,snGrid-2));
-            }, 90);
-        }
-        function resetSnake() {
-            clearInterval(snakeInt); sn = [{x:160,y:160}]; snDx=snGrid; snDy=0; snSc=0;
-            document.getElementById('snakeScore').innerText = 0;
-            snFood = {x: 240, y: 240}; runSnake();
-        }
-        document.addEventListener('keydown', e => {
-            if(e.key === 'ArrowUp' && snDy === 0) { snDx=0; snDy=-snGrid; }
-            if(e.key === 'ArrowDown' && snDy === 0) { snDx=0; snDy=snGrid; }
-            if(e.key === 'ArrowLeft' && snDx === 0) { snDx=-snGrid; snDy=0; }
-            if(e.key === 'ArrowRight' && snDx === 0) { snDx=snGrid; snDy=0; }
-        });
-
-        /* 2. SYNTHWAVE RIDER (Car game) */
-        let carAn, cCan=document.getElementById('carCanvas'), cCtx=cCan.getContext('2d');
-        let carX, carY, obs, carSc;
-
-        function updateCar() {
-            if(keys['ArrowLeft'] || keys['a']) carX -= 5;
-            if(keys['ArrowRight'] || keys['d']) carX += 5;
-            if(carX < 10) carX = 10; if(carX > cCan.width-40) carX = cCan.width-40;
-
-            carSc += 1;
-            document.getElementById('carScore').innerText = Math.floor(carSc/10);
-
-            if(Math.random() < 0.02) {
-                obs.push({x: Math.random()*(cCan.width-40)+10, y: -40, w: 30, h: 40});
+            // Controls logic
+            if (keys.ArrowUp) {
+                speed = Math.min(speed + acceleration, maxSpeed);
+            } else if (keys.ArrowDown) {
+                speed = Math.max(speed - acceleration * 1.5, 0);
+            } else {
+                speed = Math.max(speed - deceleration, 0.2); // Cruise speed
             }
 
-            cCtx.fillStyle = '#05050a'; cCtx.fillRect(0,0,cCan.width,cCan.height);
-
-            // Draw Highway grid
-            cCtx.strokeStyle = 'rgba(0, 223, 216, 0.2)';
-            for(let i=0; i<cCan.width; i+=40) {
-                cCtx.beginPath(); cCtx.moveTo(i, 0); cCtx.lineTo(i, cCan.height); cCtx.stroke();
+            if (keys.ArrowLeft && playerCar.position.x > -4.5) {
+                playerCar.position.x -= 0.12;
+                playerCar.rotation.y = 0.1;
+            } else if (keys.ArrowRight && playerCar.position.x < 4.5) {
+                playerCar.position.x += 0.12;
+                playerCar.rotation.y = -0.1;
+            } else {
+                playerCar.rotation.y = 0;
             }
 
-            // Draw obstacle
-            cCtx.fillStyle = '#ff007f';
-            for(let o of obs) {
-                o.y += 4;
-                cCtx.fillRect(o.x, o.y, o.w, o.h);
-                if(o.y > cCan.height) obs.shift();
-                // hit collision check
-                if(carX < o.x + o.w && carX + 30 > o.x && carY < o.y + o.h && carY + 40 > o.y) return resetCar();
-            }
+            // Move Enemy Cars & Check Collision
+            for (let i = 0; i < enemyCars.length; i++) {
+                let enemy = enemyCars[i];
+                enemy.position.z += speed * 2; // Moves towards player
 
-            // Player Car
-            cCtx.fillStyle = '#00dfd8'; cCtx.fillRect(carX, carY, 30, 40);
-            if(activeGame==='car') carAn = requestAnimationFrame(updateCar);
-        }
-        function resetCar() {
-            cancelAnimationFrame(carAn); carX = 180; carY = 320; obs = []; carSc = 0;
-            document.getElementById('carScore').innerText = 0; updateCar();
-        }
-
-        /* 3. GRAVITY FLIP */
-        let gravAn, gCan=document.getElementById('gravityCanvas'), gCtx=gCan.getContext('2d');
-        let playerY, pVel, isGravUp, gSpikes, gSc, isOver;
-
-        window.addEventListener('keydown', e => {
-            if(e.key === ' ' || e.key === 'ArrowUp') { isGravUp = !isGravUp; e.preventDefault(); }
-        });
-
-        function updateGravity() {
-            let gravity = isGravUp ? -0.4 : 0.4;
-            pVel += gravity; playerY += pVel;
-
-            if(playerY < 20) { playerY = 20; pVel = 0; }
-            if(playerY > gCan.height-40) { playerY = gCan.height-40; pVel = 0; }
-
-            gSc += 1; document.getElementById('gravityScore').innerText = Math.floor(gSc/10);
-
-            if(Math.random() < 0.015) {
-                let isOnTop = Math.random() > 0.5;
-                gSpikes.push({x: gCan.width, y: isOnTop ? 0 : gCan.height-30, w: 20, h: 30});
-            }
-
-            gCtx.fillStyle='#05050a'; gCtx.fillRect(0,0,gCan.width,gCan.height);
-            gCtx.fillStyle='rgba(121, 40, 202, 0.4)'; gCtx.fillRect(0,0,gCan.width,15); gCtx.fillRect(0,gCan.height-15,gCan.width,15);
-
-            gCtx.fillStyle='#ff007f';
-            for(let s of gSpikes) {
-                s.x -= 4;
-                gCtx.fillRect(s.x, s.y, s.w, s.h);
-                if(s.x + s.w < 0) gSpikes.shift();
-                if(50 < s.x + s.w && 70 > s.x && playerY < s.y + s.h && playerY + 20 > s.y) return resetGravity();
-            }
-
-            gCtx.fillStyle='#00dfd8'; gCtx.fillRect(50, playerY, 20, 20);
-            if(activeGame==='gravity') gravAn = requestAnimationFrame(updateGravity);
-        }
-        function resetGravity() {
-            cancelAnimationFrame(gravAn); playerY=160; pVel=0; isGravUp=false; gSpikes=[]; gSc=0;
-            document.getElementById('gravityScore').innerText = 0; updateGravity();
-        }
-
-        /* 4. ORBIT DEFENDER */
-        let defAn, dCan=document.getElementById('defenderCanvas'), dCtx=dCan.getContext('2d');
-        let defRot, dMeteors, defSc;
-
-        function updateDefender() {
-            if(keys['ArrowLeft'] || keys['a']) defRot -= 0.08;
-            if(keys['ArrowRight'] || keys['d']) defRot += 0.08;
-
-            if(Math.random() < 0.03) {
-                let angle = Math.random() * Math.PI * 2;
-                dMeteors.push({
-                    x: dCan.width/2 + Math.cos(angle)*250,
-                    y: dCan.height/2 + Math.sin(angle)*250,
-                    r: 8,
-                    speed: 1.5 + Math.random()
-                });
-            }
-
-            dCtx.fillStyle='#05050a'; dCtx.fillRect(0,0,dCan.width,dCan.height);
-
-            // Shield Core / Player
-            dCtx.beginPath(); dCtx.arc(dCan.width/2, dCan.height/2, 20, 0, Math.PI*2);
-            dCtx.fillStyle='#00dfd8'; dCtx.fill();
-
-            // Rotating Protector arc
-            dCtx.beginPath(); dCtx.arc(dCan.width/2, dCan.height/2, 40, defRot - 0.5, defRot + 0.5);
-            dCtx.lineWidth=6; dCtx.strokeStyle='#ff007f'; dCtx.stroke();
-
-            for(let i=dMeteors.length-1; i>=0; i--) {
-                let m = dMeteors[i];
-                let dx = dCan.width/2 - m.x, dy = dCan.height/2 - m.y;
-                let dist = Math.sqrt(dx*dx + dy*dy);
-
-                m.x += (dx/dist) * m.speed; m.y += (dy/dist) * m.speed;
-
-                dCtx.beginPath(); dCtx.arc(m.x, m.y, m.r, 0, Math.PI*2);
-                dCtx.fillStyle='#ffd800'; dCtx.fill();
-
-                // hits barrier shield?
-                if(dist <= 46 && dist >= 32) {
-                    let angleToCore = Math.atan2(m.y - dCan.height/2, m.x - dCan.width/2);
-                    let deltaAngle = Math.abs(angleToCore - defRot);
-                    while(deltaAngle > Math.PI) deltaAngle -= Math.PI*2;
-                    deltaAngle = Math.abs(deltaAngle);
-
-                    if(deltaAngle < 0.5) {
-                        dMeteors.splice(i,1); defSc += 10;
-                        document.getElementById('defenderScore').innerText = defSc;
-                        continue;
-                    }
+                // Reset position when passed
+                if (enemy.position.z > 10) {
+                    enemy.position.z = -180 - Math.random() * 50;
+                    const lanes = [-3.8, -1.3, 1.3, 3.8];
+                    enemy.position.x = lanes[Math.floor(Math.random() * lanes.length)];
+                    score += 10;
                 }
-                if(dist < 20) return resetDefender(); // crash
-            }
-            if(activeGame==='defender') defAn = requestAnimationFrame(updateDefender);
-        }
-        function resetDefender() {
-            cancelAnimationFrame(defAn); defRot=0; dMeteors=[]; defSc=0;
-            document.getElementById('defenderScore').innerText=0; updateDefender();
-        }
 
-        /* 5. TOWER STACK */
-        let stackAn, stCan=document.getElementById('stackCanvas'), stCtx=stCan.getContext('2d');
-        let blocks, currBlock, stackSc, stSpeed;
-
-        window.addEventListener('keydown', e => {
-            if(activeGame === 'stack' && e.key === ' ') {
-                dropStackBlock(); e.preventDefault();
-            }
-        });
-        stCan.addEventListener('mousedown', () => { if(activeGame === 'stack') dropStackBlock(); });
-
-        function dropStackBlock() {
-            let lastB = blocks[blocks.length-1];
-            let diff = currBlock.x - lastB.x;
-
-            if(Math.abs(diff) < currBlock.w) {
-                // cut offset w
-                let originalW = currBlock.w;
-                currBlock.w -= Math.abs(diff);
-                if(currBlock.w <= 0) return resetStack();
-
-                currBlock.x = (diff > 0) ? currBlock.x : lastB.x;
-                blocks.push({x: currBlock.x, y: currBlock.y - 25, w: currBlock.w});
-
-                stackSc++; document.getElementById('stackScore').innerText = stackSc;
-                stSpeed = Math.min(6, 2.5 + stackSc*0.1);
-                
-                currBlock = {x: 0, y: lastB.y - 50, w: currBlock.w, dir: 1};
-            } else return resetStack();
-        }
-
-        function updateStack() {
-            currBlock.x += stSpeed * currBlock.dir;
-            if(currBlock.x < 0 || currBlock.x + currBlock.w > stCan.width) currBlock.dir *= -1;
-
-            stCtx.fillStyle='#05050a'; stCtx.fillRect(0,0,stCan.width,stCan.height);
-
-            // Static blocks stacked below
-            stCtx.fillStyle='#7928ca';
-            let viewOffset = Math.max(0, blocks.length * 25 - 300);
-            for(let b of blocks) {
-                stCtx.fillRect(b.x, b.y + viewOffset, b.w, 23);
-            }
-
-            // Current Sliding Block
-            stCtx.fillStyle='#ff007f';
-            stCtx.fillRect(currBlock.x, currBlock.y + viewOffset, currBlock.w, 23);
-
-            if(activeGame==='stack') stackAn = requestAnimationFrame(updateStack);
-        }
-        function resetStack() {
-            cancelAnimationFrame(stackAn); stackSc=0; stSpeed=2.5;
-            document.getElementById('stackScore').innerText=0;
-            blocks = [{x: 80, y: 380, w: 240}];
-            currBlock = {x: 0, y: 355, w: 240, dir: 1}; updateStack();
-        }
-
-        /* 6. COSMIC CATCH */
-        let catchAn, caCan=document.getElementById('catchCanvas'), caCtx=caCan.getContext('2d');
-        let collectorX, fallingItems, caSc;
-
-        function updateCatch() {
-            if(keys['ArrowLeft'] || keys['a']) collectorX -= 6;
-            if(keys['ArrowRight'] || keys['d']) collectorX += 6;
-
-            if(collectorX < 0) collectorX = 0;
-            if(collectorX > caCan.width - 60) collectorX = caCan.width - 60;
-
-            if(Math.random() < 0.02) {
-                fallingItems.push({x: Math.random()*(caCan.width-20), y: -20, size: 8+Math.random()*6});
-            }
-
-            caCtx.fillStyle='#05050a'; caCtx.fillRect(0,0,caCan.width,caCan.height);
-
-            // Collector
-            caCtx.fillStyle='#ff007f'; caCtx.fillRect(collectorX, caCan.height - 30, 60, 15);
-
-            for(let i=fallingItems.length-1; i>=0; i--) {
-                let item = fallingItems[i];
-                item.y += 3;
-
-                caCtx.beginPath(); caCtx.arc(item.x, item.y, item.size, 0, Math.PI*2);
-                caCtx.fillStyle='#00dfd8'; caCtx.fill();
-
-                if(item.y > caCan.height) { fallingItems.splice(i,1); continue; }
-
-                // caught?
-                if(item.x > collectorX && item.x < collectorX + 60 && item.y >= caCan.height - 35) {
-                    fallingItems.splice(i, 1);
-                    caSc += 5; document.getElementById('catchScore').innerText = caSc;
+                // Collision Detection (Box Bounding)
+                let dx = Math.abs(playerCar.position.x - enemy.position.x);
+                let dz = Math.abs(playerCar.position.z - enemy.position.z);
+                if (dx < 1.4 && dz < 2.8) {
+                    endGame();
                 }
             }
-            if(activeGame==='catch') catchAn = requestAnimationFrame(updateCatch);
-        }
-        function resetCatch() {
-            cancelAnimationFrame(catchAn); collectorX=170; fallingItems=[]; caSc=0;
-            document.getElementById('catchScore').innerText=0; updateCatch();
+
+            // UI Update
+            score += Math.floor(speed * 2);
+            document.getElementById('speed-val').innerText = Math.floor(speed * 120);
+            document.getElementById('score-val').innerText = score;
+
+            // Camera follow smoothly
+            camera.position.x = playerCar.position.x * 0.3;
+
+            renderer.render(scene, camera);
         }
 
-        // Init Launch!
-        resetSnake();
+        function endGame() {
+            isGameOver = true;
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('game-over').style.display = 'block';
+        }
+
+        function resetGame() {
+            isGameOver = false;
+            speed = 0;
+            score = 0;
+            playerCar.position.set(0, 0, 0);
+            
+            // Reset enemies
+            for (let i = 0; i < enemyCars.length; i++) {
+                enemyCars[i].position.z = -50 - i * 40;
+            }
+
+            document.getElementById('game-over').style.display = 'none';
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Run Engine
+        init();
     </script>
 </body>
 </html>
